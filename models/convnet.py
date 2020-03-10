@@ -3,7 +3,7 @@ import chainer
 import chainer.functions as F
 import chainer.links as L
 from chainer.initializers import Uniform
-from convbnrelu import ConvBNReLU
+from models.convbnrelu import ConvBNReLU
 
 
 class ConvNet(chainer.Chain):
@@ -24,21 +24,21 @@ class ConvNet(chainer.Chain):
         self.train = True
 
     def __call__(self, x):
-        h = self.conv11(x, self.train)
-        h = self.conv12(h, self.train)
+        h = self.conv11(x)
+        h = self.conv12(h)
         h = F.max_pooling_2d(h, 2)
 
-        h = self.conv21(h, self.train)
-        h = self.conv22(h, self.train)
+        h = self.conv21(h)
+        h = self.conv22(h)
         h = F.max_pooling_2d(h, 2)
 
-        h = self.conv31(h, self.train)
-        h = self.conv32(h, self.train)
-        h = self.conv33(h, self.train)
-        h = self.conv34(h, self.train)
+        h = self.conv31(h)
+        h = self.conv32(h)
+        h = self.conv33(h)
+        h = self.conv34(h)
         h = F.max_pooling_2d(h, 2)
 
-        h = F.dropout(F.relu(self.fc4(h)), train=self.train)
-        h = F.dropout(F.relu(self.fc5(h)), train=self.train)
+        h = F.dropout(F.relu(self.fc4(h)))
+        h = F.dropout(F.relu(self.fc5(h)))
 
         return self.fc6(h)

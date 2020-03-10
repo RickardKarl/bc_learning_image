@@ -12,8 +12,8 @@ class ConvBNReLU(chainer.Chain):
             bn=L.BatchNormalization(out_channels, eps=1e-5)
         )
 
-    def __call__(self, x, train):
+    def __call__(self, x):
         h = self.conv(x)
-        h = self.bn(h, test=not train)
+        h = self.bn(h)
 
         return F.relu(h)
