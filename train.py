@@ -62,8 +62,9 @@ class Trainer:
         val_acc = 0
         for batch in self.val_iter:
             x_array, t_array = chainer.dataset.concat_examples(batch)
-            x = chainer.Variable(cuda.to_gpu(x_array))
-            t = chainer.Variable(cuda.to_gpu(t_array))
+            with chainer.no_backprop_mode():
+                x = chainer.Variable(cuda.to_gpu(x_array))
+                t = chainer.Variable(cuda.to_gpu(t_array))
             y = F.softmax(self.model(x))
             acc = F.accuracy(y, t)
             val_acc += float(acc.data) * len(t.data)
