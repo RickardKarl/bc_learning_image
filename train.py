@@ -70,7 +70,7 @@ class Trainer:
             val_acc += float(acc.data) * len(t.data)
 
         self.val_iter.reset()
-        self.model.train = True
+        chainer.config.train = True
         val_top1 = 100 * (1 - val_acc / len(self.val_iter.dataset))
 
         return val_top1
