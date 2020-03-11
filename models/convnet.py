@@ -1,44 +1,48 @@
+# define the 11-layer convnet architecture
+
 import math
-import chainer
-import chainer.functions as F
-import chainer.links as L
-from chainer.initializers import Uniform
-from convbnrelu import ConvBNReLU
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from models.convbnrelu import ConvBNReLU
 
 
-class ConvNet(chainer.Chain):
+class ConvNet(nn.Module):
     def __init__(self, n_classes):
-        super(ConvNet, self).__init__(
-            conv11=ConvBNReLU(3, 64, 3, pad=1),
-            conv12=ConvBNReLU(64, 64, 3, pad=1),
-            conv21=ConvBNReLU(64, 128, 3, pad=1),
-            conv22=ConvBNReLU(128, 128, 3, pad=1),
-            conv31=ConvBNReLU(128, 256, 3, pad=1),
-            conv32=ConvBNReLU(256, 256, 3, pad=1),
-            conv33=ConvBNReLU(256, 256, 3, pad=1),
-            conv34=ConvBNReLU(256, 256, 3, pad=1),
-            fc4=L.Linear(256 * 4 * 4, 1024, initialW=Uniform(1. / math.sqrt(256 * 4 * 4))),
-            fc5=L.Linear(1024, 1024, initialW=Uniform(1. / math.sqrt(1024))),
-            fc6=L.Linear(1024, n_classes, initialW=Uniform(1. / math.sqrt(1024)))
-        )
+        super(ConvNet, self).__init__()
+        self.conv11 = ConvBNReLU(3, 64, 3, pad=1)
+        self.conv12 = ConvBNReLU(64, 64, 3, pad=1)
+        self.conv21 = ConvBNReLU(64, 128, 3, pad=1)
+        self.conv22 = ConvBNReLU(128, 128, 3, pad=1)
+        self.conv31 = ConvBNReLU(128, 256, 3, pad=1)
+        self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
+        self.conv33 = ConvBNReLU(256, 256, 3, pad=1)
+        self.conv34 = ConvBNReLU(256, 256, 3, pad=1)
+        self.fc4 = nn.Linear(256 * 4 * 4, 1024)
+        nn.init.uniform_(self.fc4.weight, 1. / math.sqrt(256 * 4 * 4))
+        self.fc5 = nn.Linear(1024, 1024)
+        nn.init.uniform(self.fc5.weight, 1. / math.sqrt(1024))
+        self.fc6 = nn.Linear(1024, n_classes)
+        nn.init.uniform(self.fc6.weight, 1. / math.sqrt(1024))
+
         self.train = True
 
-    def __call__(self, x):
+    def forward(self, x):
         h = self.conv11(x, self.train)
         h = self.conv12(h, self.train)
-        h = F.max_pooling_2d(h, 2)
+        h = F.max_pool2d(h, 2)
 
         h = self.conv21(h, self.train)
         h = self.conv22(h, self.train)
-        h = F.max_pooling_2d(h, 2)
+        h = F.max_pool2d(h, 2)
 
         h = self.conv31(h, self.train)
         h = self.conv32(h, self.train)
         h = self.conv33(h, self.train)
         h = self.conv34(h, self.train)
-        h = F.max_pooling_2d(h, 2)
+        h = F.max_pool2d(h, 2)
 
-        h = F.dropout(F.relu(self.fc4(h)), train=self.train)
-        h = F.dropout(F.relu(self.fc5(h)), train=self.train)
+        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
+        h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
         return self.fc6(h)

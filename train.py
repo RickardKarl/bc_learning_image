@@ -1,11 +1,27 @@
 import sys
 import numpy as np
-import chainer
-from chainer import cuda
-import chainer.functions as F
+import torch
+from torch import cuda
+import torch.nn.functional as F
 import time
 
 import utils
+
+
+def accuracy(y, t, topk=(1,)):
+    """Computes the precision@k for the specified values of k"""
+    maxk = max(topk)
+    batch_size = t.size(0)
+
+    _, pred = y.topk(maxk, 1, True, True)
+    pred = pred.t()
+    correct = pred.eq(t.view(1, -1).expand_as(pred))
+
+    res = []
+    for k in topk:
+        correct_k = correct[:k].view(-1).float().sum(0)
+        res.append(correct_k.mul_(100.0 / batch_size))
+    return res
 
 
 class Trainer:
@@ -15,28 +31,35 @@ class Trainer:
         self.train_iter = train_iter
         self.val_iter = val_iter
         self.opt = opt
+        # TODO: check if DataLoader is used to obtain train_iter in dataset.py
+        # self.n_batches = len(train_iter)
         self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
         self.start_time = time.time()
 
     def train(self, epoch):
+        """
+            run one train epoch
+        """
         self.optimizer.lr = self.lr_schedule(epoch)
         train_loss = 0
         train_acc = 0
-        for i, batch in enumerate(self.train_iter):
-            x_array, t_array = chainer.dataset.concat_examples(batch)
-            x = chainer.Variable(cuda.to_gpu(x_array))
-            t = chainer.Variable(cuda.to_gpu(t_array))
-            self.optimizer.zero_grads()
+        # TODO: check if DataLoader is used to obtain train_iter in dataset.py
+        for i, (x_array, t_array) in enumerate(self.train_iter):
+            device = torch.device("cuda" if cuda.is_available() else "cpu")
+            x = x_array.to(device)
+            t = t_array.to(device)
+            self.optimizer.zero_grad()
             y = self.model(x)
             if self.opt.BC:
                 loss = utils.kl_divergence(y, t)
-                acc = F.accuracy(y, F.argmax(t, axis=1))
+                acc = accuracy(y, np.argmax(t, axis=1))[0]
             else:
-                loss = F.softmax_cross_entropy(y, t)
-                acc = F.accuracy(y, t)
+                loss = F.cross_entropy(y, t)
+                acc = accuracy(y, t)[0]
 
             loss.backward()
-            self.optimizer.update()
+            self.optimizer.step()
+
             train_loss += float(loss.data) * len(t.data)
             train_acc += float(acc.data) * len(t.data)
 
@@ -50,6 +73,7 @@ class Trainer:
             sys.stderr.write('\r\033[K' + line)
             sys.stderr.flush()
 
+        # TODO: if reset() is necessary
         self.train_iter.reset()
         train_loss /= len(self.train_iter.dataset)
         train_top1 = 100 * (1 - train_acc / len(self.train_iter.dataset))
@@ -59,14 +83,15 @@ class Trainer:
     def val(self):
         self.model.train = False
         val_acc = 0
-        for batch in self.val_iter:
-            x_array, t_array = chainer.dataset.concat_examples(batch)
-            x = chainer.Variable(cuda.to_gpu(x_array), volatile=True)
-            t = chainer.Variable(cuda.to_gpu(t_array), volatile=True)
+        for (x_array, t_array) in self.val_iter:
+            device = torch.device("cuda" if cuda.is_available() else "cpu")
+            x = x_array.to(device)
+            t = t_array.to(device)
             y = F.softmax(self.model(x))
-            acc = F.accuracy(y, t)
+            acc = accuracy(y, t)[0]
             val_acc += float(acc.data) * len(t.data)
 
+        # TODO: if reset() is necessary
         self.val_iter.reset()
         self.model.train = True
         val_top1 = 100 * (1 - val_acc / len(self.val_iter.dataset))
