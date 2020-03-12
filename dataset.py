@@ -90,7 +90,7 @@ class ImageDataset(torch.utils.data.Dataset):
 def setup(opt):
     def unpickle(fn):
         with open(fn, 'rb') as f:
-            data = cPickle.load(f)
+            data = cPickle.load(f, encoding='latin1')
         return data
 
     if opt.dataset == 'cifar10':
