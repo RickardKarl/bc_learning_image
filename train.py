@@ -46,7 +46,6 @@ class Trainer:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
-            self.optimizer.zero_grad()
             y = self.model(x)
             if self.opt.BC:
                 loss = utils.kl_divergence(y, t)
@@ -55,6 +54,7 @@ class Trainer:
                 loss = F.cross_entropy(y, t)
                 acc = accuracy(y, t)[0]
 
+            self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
 
