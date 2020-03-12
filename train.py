@@ -31,8 +31,8 @@ class Trainer:
         self.train_iter = train_iter
         self.val_iter = val_iter
         self.opt = opt
-        self.n_batches = len(train_iter)
-        # self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
+        # self.n_batches = len(train_iter)
+        self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
         self.start_time = time.time()
 
     def train(self, epoch):
