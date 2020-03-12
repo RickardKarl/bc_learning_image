@@ -85,7 +85,7 @@ class Trainer:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
-            y = F.softmax(self.model(x))
+            y = F.softmax(self.model(x), dim=1)
             acc = accuracy(y, t)[0]
             val_acc += float(acc.data) * len(t.data)
 
