@@ -46,6 +46,7 @@ class Trainer:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
+            self.optimizer.zero_grad()
             # TODO: find out softmax_cross_entropy in PyTorch
             y = F.softmax(self.model(x), dim=1)
             if self.opt.BC:
@@ -55,7 +56,6 @@ class Trainer:
                 loss = F.cross_entropy(y, t)
                 acc = accuracy(y, t)[0]
 
-            self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
 
