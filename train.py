@@ -73,7 +73,7 @@ class Trainer:
             sys.stderr.flush()
 
         # TODO: if reset() is necessary
-        self.train_iter.reset()
+        # self.train_iter.reset()
         train_loss /= len(self.train_iter.dataset)
         train_top1 = 100 * (1 - train_acc / len(self.train_iter.dataset))
 
@@ -91,7 +91,7 @@ class Trainer:
             val_acc += float(acc.data) * len(t.data)
 
         # TODO: if reset() is necessary
-        self.val_iter.reset()
+        # self.val_iter.reset()
         self.model.train = True
         val_top1 = 100 * (1 - val_acc / len(self.val_iter.dataset))
 
