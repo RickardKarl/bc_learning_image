@@ -2,7 +2,8 @@
  Between-class Learning for Image Classification.
  Yuji Tokozume, Yoshitaka Ushiku, and Tatsuya Harada
 
- Updated code to new Chainer version 10 March 2020 by Rickard Karlsson
+ Updated code to new chainer version
+ as of 10 March 2020 by Rickard Karlsson
 """
 
 import sys
