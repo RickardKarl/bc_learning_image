@@ -20,7 +20,7 @@ def accuracy(y, t, topk=(1,)):
     res = []
     for k in topk:
         correct_k = correct[:k].view(-1).float().sum(0)
-        res.append(correct_k.mul_(100.0 / batch_size))
+        res.append(correct_k.mul_(1.0 / batch_size))
     return res
 
 
@@ -48,7 +48,6 @@ class Trainer:
             t = t_array.to(device, dtype=torch.int64)
             self.optimizer.zero_grad()
             y = self.model(x)
-            # y = torch.tensor(y, dtype=torch.int64, device=device)
             if self.opt.BC:
                 loss = utils.kl_divergence(y, t)
                 acc = accuracy(y, np.argmax(t, axis=1))[0]
@@ -85,7 +84,7 @@ class Trainer:
         for (x_array, t_array) in self.val_iter:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
-            t = t_array.to(device)
+            t = t_array.to(device, dtype=torch.int64)
             y = F.softmax(self.model(x))
             acc = accuracy(y, t)[0]
             val_acc += float(acc.data) * len(t.data)
