@@ -26,6 +26,6 @@ class ConvBNReLU(nn.Module):
     def forward(self, x, train):
         h = self.conv(x)
         # self.train = train
-        h = self.bn(h, training=train)
+        h = self.bn(h, track_running_stats=train)
 
         return F.relu(h)
