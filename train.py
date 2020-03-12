@@ -48,8 +48,7 @@ class Trainer:
             t = t_array.to(device, dtype=torch.int64)
             self.optimizer.zero_grad()
             # TODO: find out softmax_cross_entropy in PyTorch
-            y = self.model(x)
-            # y = F.softmax(self.model(x), dim=1)
+            y = F.softmax(self.model(x), dim=1)
             if self.opt.BC:
                 loss = utils.kl_divergence(y, t)
                 acc = accuracy(y, np.argmax(t, axis=1))[0]
