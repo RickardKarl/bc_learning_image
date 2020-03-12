@@ -31,9 +31,8 @@ class Trainer:
         self.train_iter = train_iter
         self.val_iter = val_iter
         self.opt = opt
-        # TODO: check if DataLoader is used to obtain train_iter in dataset.py
-        # self.n_batches = len(train_iter)
-        self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
+        self.n_batches = len(train_iter)
+        # self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
         self.start_time = time.time()
 
     def train(self, epoch):
@@ -43,7 +42,6 @@ class Trainer:
         self.optimizer.lr = self.lr_schedule(epoch)
         train_loss = 0
         train_acc = 0
-        # TODO: check if DataLoader is used to obtain train_iter in dataset.py
         for i, (x_array, t_array) in enumerate(self.train_iter):
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
