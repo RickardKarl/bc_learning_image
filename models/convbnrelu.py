@@ -18,14 +18,14 @@ class ConvBNReLU(nn.Module):
         self.conv = nn.Conv2d(in_channels, out_channels, ksize, stride, pad, bias=bias)
         # track_running_stats is used to initialize the
         # running estimates as well as to check if they should be updated in training
-        self.bn = nn.BatchNorm2d(out_channels, eps=1e-5, track_running_stats=self.train)
+        self.bn = nn.BatchNorm2d(out_channels, eps=1e-5)
         self.apply(_weights_init)
 
-        self.train = True
+        # self.train = True
 
     def forward(self, x, train):
         h = self.conv(x)
-        self.train = train
-        h = self.bn(h)
+        # self.train = train
+        h = self.bn(h, training=train)
 
         return F.relu(h)
