@@ -1,12 +1,11 @@
 """
  Between-class Learning for Image Classification.
- Yuji Tokozume, Yoshitaka Ushiku, and Tatsuya Harada
-
+ Porting to PyTorch
 """
 
 import sys
 import os
-import chainer
+import torch
 
 import opts
 import models
@@ -16,7 +15,7 @@ from train import Trainer
 
 def main():
     opt = opts.parse()
-    chainer.cuda.get_device_from_id(opt.gpu).use()
+    torch.cuda.set_device(opt.gpu)
     for i in range(1, opt.nTrials + 1):
         print('+-- Trial {} --+'.format(i))
         train(opt, i)
@@ -24,10 +23,11 @@ def main():
 
 def train(opt, trial):
     model = getattr(models, opt.netType)(opt.nClasses)
-    model.to_gpu()
-    optimizer = chainer.optimizers.NesterovAG(lr=opt.LR, momentum=opt.momentum)
-    optimizer.setup(model)
-    optimizer.add_hook(chainer.optimizer.WeightDecay(opt.weightDecay))
+    model.cuda()
+    # TODO: there is no direct method in PyTorch with NesterovAG
+    optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
+                                weight_decay=opt.weightDecay, nesterov=True)
+
     train_iter, val_iter = dataset.setup(opt)
     trainer = Trainer(model, optimizer, train_iter, val_iter, opt)
 
@@ -41,8 +41,7 @@ def train(opt, trial):
         sys.stdout.flush()
 
     if opt.save != 'None':
-        chainer.serializers.save_npz(
-            os.path.join(opt.save, 'model_trial{}.npz'.format(trial)), model)
+        torch.save(model.state_dict(), os.path.join(opt.save, 'checkpoint.th'))
 
 
 if __name__ == '__main__':
