@@ -2,14 +2,14 @@ import os
 import numpy as np
 import random
 import cPickle
-import chainer
+import torch
 
 import utils as U
 
 
-class ImageDataset(chainer.dataset.DatasetMixin):
+class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, images, labels, opt, train=True):
-        self.base = chainer.datasets.TupleDataset(images, labels)
+        self.base = zip(images, labels) # Might not work
         self.opt = opt
         self.train = train
         self.mix = (opt.BC and train)
@@ -55,7 +55,7 @@ class ImageDataset(chainer.dataset.DatasetMixin):
 
         return image
 
-    def get_example(self, i):
+    def __getitem__(self, i):
         if self.mix:  # Training phase of BC learning
             while True:  # Select two training examples
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
@@ -111,7 +111,7 @@ def setup(opt):
     # Iterator setup
     train_data = ImageDataset(train_images, train_labels, opt, train=True)
     val_data = ImageDataset(val_images, val_labels, opt, train=False)
-    train_iter = chainer.iterators.MultiprocessIterator(train_data, opt.batchSize, repeat=False)
-    val_iter = chainer.iterators.SerialIterator(val_data, opt.batchSize, repeat=False, shuffle=False)
+    train_iter = torch.utils.data.DataLoader(train_data, batch_size=opt.batchSize, pin_memory=True) # Was multiprocess
+    val_iter = torch.utils.data.DataLoader(val_data, batch_size=opt.batchSize, pin_memory=True)
 
     return train_iter, val_iter

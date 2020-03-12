@@ -1,6 +1,6 @@
 import numpy as np
 import random
-import chainer.functions as F
+import torch.nn.functional as F
 
 
 def padding(pad):
@@ -46,10 +46,8 @@ def zero_mean(mean, std):
 
 
 def kl_divergence(y, t):
-    entropy = - F.sum(t[t.data.nonzero()] * F.log(t[t.data.nonzero()]))
-    crossEntropy = - F.sum(t * F.log_softmax(y))
 
-    return (crossEntropy - entropy) / y.shape[0]
+    return F.kl_div(y, t)
 
 
 def to_hms(time):
