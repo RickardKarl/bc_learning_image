@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import random
-import cPickle
+import _pickle as cPickle
 import torch
 
 import utils as U
