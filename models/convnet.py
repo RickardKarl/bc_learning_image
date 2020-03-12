@@ -21,28 +21,28 @@ class ConvNet(nn.Module):
         self.fc4 = nn.Linear(256 * 4 * 4, 1024)
         nn.init.uniform_(self.fc4.weight, 1. / math.sqrt(256 * 4 * 4))
         self.fc5 = nn.Linear(1024, 1024)
-        nn.init.uniform(self.fc5.weight, 1. / math.sqrt(1024))
+        nn.init.uniform_(self.fc5.weight, 1. / math.sqrt(1024))
         self.fc6 = nn.Linear(1024, n_classes)
-        nn.init.uniform(self.fc6.weight, 1. / math.sqrt(1024))
+        nn.init.uniform_(self.fc6.weight, 1. / math.sqrt(1024))
 
         self.train = True
 
     def forward(self, x):
-        h = self.conv11(x)
-        h = self.conv12(h)
+        h = self.conv11(x, self.train)
+        h = self.conv12(h, self.train)
         h = F.max_pool2d(h, 2)
 
-        h = self.conv21(h)
-        h = self.conv22(h)
+        h = self.conv21(h, self.train)
+        h = self.conv22(h, self.train)
         h = F.max_pool2d(h, 2)
 
-        h = self.conv31(h)
-        h = self.conv32(h)
-        h = self.conv33(h)
-        h = self.conv34(h)
+        h = self.conv31(h, self.train)
+        h = self.conv32(h, self.train)
+        h = self.conv33(h, self.train)
+        h = self.conv34(h, self.train)
         h = F.max_pool2d(h, 2)
 
-        h = F.dropout(F.relu(self.fc4(h)))
-        h = F.dropout(F.relu(self.fc5(h)))
+        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
+        h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
         return self.fc6(h)
