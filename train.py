@@ -48,7 +48,7 @@ class Trainer:
             t = t_array.to(device, dtype=torch.int64)
             self.optimizer.zero_grad()
             y = self.model(x)
-            y = torch.tensor(y, dtype=torch.int64, device=device)
+            # y = torch.tensor(y, dtype=torch.int64, device=device)
             if self.opt.BC:
                 loss = utils.kl_divergence(y, t)
                 acc = accuracy(y, np.argmax(t, axis=1))[0]
