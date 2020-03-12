@@ -42,7 +42,8 @@ class ConvNet(nn.Module):
         h = self.conv34(h, self.train)
         h = F.max_pool2d(h, 2)
 
-        h = h.unsqueeze_(2)
+        print(h.size)
+        h = h.view(-1, h.size(0))
 
         h = F.dropout(F.relu(self.fc4(h)), training=self.train)
         h = F.dropout(F.relu(self.fc5(h)), training=self.train)
