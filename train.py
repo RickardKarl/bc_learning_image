@@ -49,6 +49,8 @@ class Trainer:
 
             if self.opt.BC:
                 y = self.model(x)
+                y = y.to(torch.float32)
+                t = t.to(torch.float32)
                 loss = utils.kl_divergence(y, t)
                 t_values, t_indices = torch.max(t, dim=1)
                 acc = accuracy(y, t_indices)[0]
