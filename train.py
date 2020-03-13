@@ -53,6 +53,7 @@ class Trainer:
                 loss = utils.kl_divergence(y, t)
                 acc = accuracy(y, np.argmax(t, axis=1))[0]
             else:
+                t = torch.tensor(t, dtype=torch.int64)
                 loss = F.cross_entropy(y, t)
                 acc = accuracy(y, t)[0]
 
