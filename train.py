@@ -43,7 +43,7 @@ class Trainer:
 
             if self.opt.BC:
                 # y = F.log_softmax(self.model(x), dim=1)
-                # t = t.to(torch.float32)
+                t = t.to(device, dtype=torch.float32)
                 y = self.model(x)
                 y = y.to(torch.float32)
                 loss = utils.kl_divergence(y, t)
