@@ -42,8 +42,7 @@ class Trainer:
             t = t_array.to(device, dtype=torch.int64)
 
             if self.opt.BC:
-                # y = F.log_softmax(self.model(x), dim=1)
-                y = self.model(x)
+                y = F.log_softmax(self.model(x), dim=1)
                 y = y.to(torch.float32)
                 t = t.to(torch.float32)
                 loss = utils.kl_divergence(y, t)
@@ -86,7 +85,7 @@ class Trainer:
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
             # TODO: figure out why to use softmax here since it also works fine without softmax
-            y = self.model(x)
+            y = F.softmax(self.model(x), dim=1)
             acc = accuracy(y.data, t)
             val_acc += float(acc.item()) * len(t.data)
 
