@@ -46,10 +46,10 @@ class Trainer:
                 y = y.to(torch.float32)
                 t = t.to(torch.float32)
                 loss = utils.kl_divergence(y, t)
+                # TODO: figure out why to use t_indices here
                 t_values, t_indices = torch.max(t, dim=1)
-                acc = accuracy(y, t_indices)
+                acc = accuracy(y.data, t)
             else:
-                # TODO: find out softmax_cross_entropy in PyTorch
                 y = self.model(x)
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
                 loss = F.cross_entropy(y, t)
@@ -72,8 +72,6 @@ class Trainer:
             sys.stderr.write('\r\033[K' + line)
             sys.stderr.flush()
 
-        # TODO: if reset() is necessary
-        # self.train_iter.reset()
         train_loss /= len(self.train_iter.dataset)
         train_top1 = 100 * (1 - train_acc / len(self.train_iter.dataset))
 
@@ -86,13 +84,11 @@ class Trainer:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
-            # TODO: figure out why to use softmax here
+            # TODO: figure out why to use softmax here since it also works fine without softmax
             y = self.model(x)
             acc = accuracy(y.data, t)
             val_acc += float(acc.item()) * len(t.data)
 
-        # TODO: if reset() is necessary
-        # self.val_iter.reset()
         self.model.train = True
         val_top1 = 100 * (1 - val_acc / len(self.val_iter.dataset))
 
