@@ -43,13 +43,13 @@ class Trainer:
 
             if self.opt.BC:
                 # y = F.log_softmax(self.model(x), dim=1)
-                y = torch.log(self.model(x))
+                y = self.model(x)
                 y = y.to(torch.float32)
                 t = t.to(torch.float32)
                 loss = utils.kl_divergence(y, t)
                 # TODO: figure out why to use t_indices here; maybe due to the use of log_softmax
                 t_values, t_indices = torch.max(t, dim=1)
-                acc = accuracy(y.data, t)
+                acc = accuracy(y.data, t_indices)
             else:
                 y = self.model(x)
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
@@ -86,10 +86,7 @@ class Trainer:
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
             # TODO: figure out why to use softmax here since it also works fine without softmax
-            if self.opt.BC:
-                y = torch.log(self.model(x))
-            else:
-                y = self.model(x)
+            y = self.model(x)
             acc = accuracy(y.data, t)
             val_acc += float(acc.item()) * len(t.data)
 
