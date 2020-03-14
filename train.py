@@ -13,7 +13,7 @@ def accuracy(y, t):
     pred = y.argmax(axis=1).reshape(t.shape)
 
     count = (pred == t).sum()
-    acc = np.asarray(float(count) / t.size, dtype=y.dtype)
+    acc = np.asarray(float(count) / len(t.data), dtype=y.dtype)
 
     return acc
 
@@ -47,13 +47,13 @@ class Trainer:
                 t = t.to(torch.float32)
                 loss = utils.kl_divergence(y, t)
                 t_values, t_indices = torch.max(t, dim=1)
-                acc = accuracy(y, t_indices)[0]
+                acc = accuracy(y, t_indices)
             else:
                 # TODO: find out softmax_cross_entropy in PyTorch
                 y = self.model(x)
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
                 loss = F.cross_entropy(y, t)
-                acc = accuracy(y.data, t)[0]
+                acc = accuracy(y.data, t)
 
             self.optimizer.zero_grad()
             loss.backward()
@@ -87,7 +87,7 @@ class Trainer:
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
             y = F.softmax(self.model(x), dim=1)
-            acc = accuracy(y.data, t)[0]
+            acc = accuracy(y.data, t)
             val_acc += float(acc.item()) * len(t.data)
 
         # TODO: if reset() is necessary
