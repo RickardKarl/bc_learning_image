@@ -46,7 +46,7 @@ class Trainer:
                 t = t.to(device, dtype=torch.float32)
                 y = y.to(device, dtype=torch.float32)
                 entropy = - torch.sum(t[t.data.nonzero()] * torch.log(t[t.data.nonzero()]))
-                crossEntropy = - torch.sum(t * F.log_softmax(y))
+                crossEntropy = - torch.sum(t * F.log_softmax(y, dim=1))
                 loss = (crossEntropy - entropy) / y.shape[0]
                 # loss = utils.kl_divergence(y, t)
                 t_values, t_indices = torch.max(t, dim=1)
