@@ -12,7 +12,7 @@ def accuracy(y, t):
     """ Computes the multiclass classification accuracy """
     pred = y.argmax(axis=1).reshape(t.shape)
 
-    count = np.sum(pred == t)
+    count = (pred == t).sum()
     acc = np.asarray(float(count) / t.size, dtype=y.dtype)
 
     return acc
