@@ -49,7 +49,7 @@ class Trainer:
                 loss = utils.kl_divergence(y, t)
                 # TODO: figure out why to use t_indices here; maybe due to the use of log_softmax
                 t_values, t_indices = torch.max(t, dim=1)
-                acc = accuracy(y.data, t_indices)
+                acc = accuracy(y.data, t)
             else:
                 y = self.model(x)
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
