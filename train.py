@@ -13,7 +13,7 @@ def accuracy(y, t):
     pred = y.argmax(axis=1).reshape(t.shape)
 
     count = (pred == t).sum()
-    acc = np.asarray(float(count) / len(t.data), dtype=y.dtype)
+    acc = np.asarray(float(count) / len(t.data))
 
     return acc
 
