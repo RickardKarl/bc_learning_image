@@ -42,11 +42,11 @@ class Trainer:
             t = t_array.to(device, dtype=torch.int64)
 
             if self.opt.BC:
-                y = F.log_softmax(self.model(x), dim=1)
-                y = y.to(torch.float32)
-                t = t.to(torch.float32)
+                # y = F.log_softmax(self.model(x), dim=1)
+                # y = y.to(torch.float32)
+                # t = t.to(torch.float32)
+                y = self.model(x)
                 loss = utils.kl_divergence(y, t)
-                # TODO: figure out why to use t_indices here; maybe due to the use of log_softmax
                 t_values, t_indices = torch.max(t, dim=1)
                 acc = accuracy(y.data, t_indices)
             else:
