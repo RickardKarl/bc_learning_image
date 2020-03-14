@@ -8,20 +8,14 @@ import time
 import utils
 
 
-def accuracy(y, t, topk=(1,)):
-    """Computes the precision@k for the specified values of k"""
-    maxk = max(topk)
-    batch_size = t.size(0)
+def accuracy(y, t):
+    """ Computes the multiclass classification accuracy """
+    pred = y.argmax(axis=1).reshape(t.shape)
 
-    _, pred = y.topk(maxk, 1, True, True)
-    pred = pred.t()
-    correct = pred.eq(t.view(1, -1).expand_as(pred))
+    count = np.sum((pred == t))
+    acc = np.asarray(float(count) / t.size, dtype=y.dtype)
 
-    res = []
-    for k in topk:
-        correct_k = correct[:k].view(-1).float().sum(0)
-        res.append(correct_k.mul_(1.0 / batch_size))
-    return res
+    return acc
 
 
 class Trainer:
@@ -56,16 +50,17 @@ class Trainer:
                 acc = accuracy(y, t_indices)[0]
             else:
                 # TODO: find out softmax_cross_entropy in PyTorch
-                y = F.softmax(self.model(x), dim=1)
+                y = self.model(x)
+                """ F.cross_entropy already combines log_softmax and NLLLoss """
                 loss = F.cross_entropy(y, t)
-                acc = accuracy(y, t)[0]
+                acc = accuracy(y.data, t)[0]
 
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
 
-            train_loss += float(loss.data) * len(t.data)
-            train_acc += float(acc.data) * len(t.data)
+            train_loss += float(loss.item()) * len(t.data)
+            train_acc += float(acc.item()) * len(t.data)
 
             elapsed_time = time.time() - self.start_time
             progress = (self.n_batches * (epoch - 1) + i + 1) * 1.0 / (self.n_batches * self.opt.nEpochs)
@@ -92,8 +87,8 @@ class Trainer:
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
             y = F.softmax(self.model(x), dim=1)
-            acc = accuracy(y, t)[0]
-            val_acc += float(acc.data) * len(t.data)
+            acc = accuracy(y.data, t)[0]
+            val_acc += float(acc.item()) * len(t.data)
 
         # TODO: if reset() is necessary
         # self.val_iter.reset()
