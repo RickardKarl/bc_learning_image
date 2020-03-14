@@ -28,18 +28,18 @@ class ConvNet(nn.Module):
         self.train = True
 
     def forward(self, x):
-        h = self.conv11(x, self.train)
-        h = self.conv12(h, self.train)
+        h = self.conv11(x)
+        h = self.conv12(h)
         h = F.max_pool2d(h, 2)
 
-        h = self.conv21(h, self.train)
-        h = self.conv22(h, self.train)
+        h = self.conv21(h)
+        h = self.conv22(h)
         h = F.max_pool2d(h, 2)
 
-        h = self.conv31(h, self.train)
-        h = self.conv32(h, self.train)
-        h = self.conv33(h, self.train)
-        h = self.conv34(h, self.train)
+        h = self.conv31(h)
+        h = self.conv32(h)
+        h = self.conv33(h)
+        h = self.conv34(h)
         h = F.max_pool2d(h, 2)
 
         # h = h.view(h.size(0), -1)
