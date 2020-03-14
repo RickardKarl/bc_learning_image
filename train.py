@@ -39,7 +39,7 @@ class Trainer:
         for i, (x_array, t_array) in enumerate(self.train_iter):
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
-            t = t_array.to(device, dtype=torch.int64)
+            t = t_array.to(device)
 
             if self.opt.BC:
                 y = F.log_softmax(self.model(x), dim=1)
