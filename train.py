@@ -43,9 +43,9 @@ class Trainer:
 
             if self.opt.BC:
                 # y = F.log_softmax(self.model(x), dim=1)
-                # y = y.to(torch.float32)
                 # t = t.to(torch.float32)
                 y = self.model(x)
+                y = y.to(torch.float32)
                 loss = utils.kl_divergence(y, t)
                 t_values, t_indices = torch.max(t, dim=1)
                 acc = accuracy(y.data, t_indices)
