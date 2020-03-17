@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import torch.nn.functional as F
-
+import torch
 
 def padding(pad):
     def f(image):
