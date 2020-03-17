@@ -48,6 +48,7 @@ class Trainer:
                 t_values, t_indices = torch.max(t, dim=1)
                 acc = accuracy(y.data, t_indices)
             else:
+                t = t.to(device, dtype=torch.int64)
                 y = self.model(x)
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
                 loss = F.cross_entropy(y, t)
