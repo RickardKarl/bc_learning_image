@@ -46,9 +46,7 @@ def zero_mean(mean, std):
 
 
 def kl_divergence(y, t):
-    print(t)
     entropy = F.softmax(t, dim=1) * F.log_softmax(t, dim=1)
-    print(entropy)
     entropy = - entropy.sum()
     crossEntropy = t * F.log_softmax(y, dim=1)
     crossEntropy = - crossEntropy.sum()

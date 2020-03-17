@@ -40,9 +40,6 @@ class Trainer:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             x = x_array.to(device)
             t = t_array.to(device)
-            print(t_array)
-            print("convert to t")
-            print(t)
             if self.opt.BC:
                 y = self.model(x)
                 t = t.to(device, dtype=torch.float32)
