@@ -111,7 +111,7 @@ def setup(opt):
     # Iterator setup
     train_data = ImageDataset(train_images, train_labels, opt, train=True)
     val_data = ImageDataset(val_images, val_labels, opt, train=False)
-    train_iter = torch.utils.data.DataLoader(train_data, batch_size=opt.batchSize)#, pin_memory=True) # Was multiprocess
-    val_iter = torch.utils.data.DataLoader(val_data, batch_size=opt.batchSize)#, pin_memory=True)
+    train_iter = torch.utils.data.DataLoader(train_data, batch_size=opt.batchSize, pin_memory=True) # Was multiprocess
+    val_iter = torch.utils.data.DataLoader(val_data, batch_size=opt.batchSize, pin_memory=True)
 
     return train_iter, val_iter
