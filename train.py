@@ -41,6 +41,8 @@ class Trainer:
             x = x_array.to(device)
             t = t_array.to(device, dtype=torch.int64)
             print(t_array)
+            print("convert to t")
+            print(t)
             if self.opt.BC:
                 y = self.model(x)
                 t = t.to(device, dtype=torch.float32)
