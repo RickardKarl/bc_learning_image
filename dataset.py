@@ -95,6 +95,7 @@ def setup(opt):
 
     if opt.dataset == 'cifar10':
         train = [unpickle(os.path.join(opt.data, 'data_batch_{}'.format(i))) for i in range(1, 6)]
+        print(train)
         train_images = np.concatenate([d['data'] for d in train]).reshape((-1, 3, 32, 32))
         train_labels = np.concatenate([d['labels'] for d in train])
         val = unpickle(os.path.join(opt.data, 'test_batch'))

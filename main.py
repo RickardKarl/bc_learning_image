@@ -29,7 +29,6 @@ def train(opt, trial):
                                 weight_decay=opt.weightDecay, nesterov=True)
 
     train_iter, val_iter = dataset.setup(opt)
-    print(train_iter)
     trainer = Trainer(model, optimizer, train_iter, val_iter, opt)
 
     for epoch in range(1, opt.nEpochs + 1):
