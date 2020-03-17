@@ -46,8 +46,13 @@ def zero_mean(mean, std):
 
 
 def kl_divergence(y, t):
-    #y = F.log_softmax(self.model(x), dim=1)
-    return F.kl_div(y, t, reduction="batchmean")
+    entropy = F.softmax(t, dim=1) * F.log_softmax(t, dim=1)
+    entropy = - entropy.sum()
+    crossEntropy = t * F.log_softmax(y, dim=1)
+    crossEntropy = - crossentropy.sum()
+
+    return (crossEntropy - entropy)/y.size[0]
+    #return F.kl_div(y, t, reduction="batchmean")
 
 
 def to_hms(time):
