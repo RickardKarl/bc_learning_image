@@ -42,6 +42,7 @@ class Trainer:
             t = t_array.to(device, dtype=torch.int64)
 
             if self.opt.BC:
+                y = self.model(x)
                 t = t.to(device, dtype=torch.float32)
                 y = y.to(device, dtype=torch.float32)
                 loss = utils.kl_divergence(y, t)
