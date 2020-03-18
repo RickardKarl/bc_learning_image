@@ -11,12 +11,14 @@ import utils
 
 def accuracy(y, t):
     """ Computes the multiclass classification accuracy """
+    print(y)
+    print(t)
     pred = y.argmax(axis=1).reshape(t.shape)
-
+    print(pred)
     #count = (pred == t).sum()
     #acc = np.asarray(float(count) / len(t.data))
     acc = accuracy_score(t, pred)
-    
+    print(acc)
     return acc
 
 
@@ -49,7 +51,7 @@ class Trainer:
                 t = t.to(device, dtype=torch.float32)
                 y = y.to(device, dtype=torch.float32)
                 loss = utils.kl_divergence(y, t)
-                t_values, t_indices = torch.max(t, dim=1)
+                t_indices = torch.argmax(t, dim=1)
                 acc = accuracy(y.data, t_indices)
             else:
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
