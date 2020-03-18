@@ -12,6 +12,7 @@ def parse():
     parser.add_argument('--nTrials', type=int, default=10)
     parser.add_argument('--save', default='None', help='Directory to save the results')
     parser.add_argument('--gpu', type=int, default=0)
+    parser.add_argument('--noGPU', type =int, default = 0)
 
     # Learning settings
     parser.add_argument('--BC', action='store_true', help='BC learning')
