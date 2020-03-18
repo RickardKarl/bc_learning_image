@@ -52,7 +52,7 @@ def kl_divergence(y, t):
     #crossEntropy = t * F.log_softmax(y, dim=1)
     #crossEntropy = - crossEntropy.sum()
     #return torch.div((crossEntropy - entropy), y.shape[0])
-    
+    y = F.softmax(y)
     return F.kl_div(y, t, reduction="batchmean")
 
 
