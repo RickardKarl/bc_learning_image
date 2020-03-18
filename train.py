@@ -11,8 +11,7 @@ import utils
 
 def accuracy(y, t):
     """ Computes the multiclass classification accuracy """
-    
-    # Computes the multiclass classification accuracy 
+
     pred = y.argmax(axis=1).reshape(t.shape)
     count = (pred == t).sum()
     acc = np.asarray(float(count) / len(t.data))
