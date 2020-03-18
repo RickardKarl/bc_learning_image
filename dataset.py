@@ -9,7 +9,7 @@ import utils as U
 
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, images, labels, opt, train=True):
-        self.base = zip(images, labels) # Might not work
+        self.base = list(zip(images, labels)) # Might not work
         self.opt = opt
         self.train = train
         self.mix = (opt.BC and train)
