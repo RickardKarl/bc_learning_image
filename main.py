@@ -15,7 +15,7 @@ from train import Trainer
 
 def main():
     opt = opts.parse()
-    if opt.noGPU == 0:
+    if opt.noGPU == False:
         torch.cuda.set_device(opt.gpu)
     for i in range(1, opt.nTrials + 1):
         print('+-- Trial {} --+'.format(i))
