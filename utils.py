@@ -46,13 +46,7 @@ def zero_mean(mean, std):
 
 
 def kl_divergence(y, t):
-
-    #entropy = F.softmax(t, dim=1) * F.log_softmax(t, dim=1)
-    #entropy = - entropy.sum()
-    #crossEntropy = t * F.log_softmax(y, dim=1)
-    #crossEntropy = - crossEntropy.sum()
-    #return torch.div((crossEntropy - entropy), y.shape[0])
-    y = F.log_softmax(y)
+    y = F.log_softmax(y, dim = 1)
     return F.kl_div(y, t, reduction="batchmean")
 
 
