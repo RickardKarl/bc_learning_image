@@ -24,7 +24,8 @@ def main():
 
 def train(opt, trial):
     model = getattr(models, opt.netType)(opt.nClasses)
-    model.cuda()
+    if opt.noGPU == False:
+        model.cuda()
     # TODO: there is no direct method in PyTorch with NesterovAG
     optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
                                 weight_decay=opt.weightDecay, nesterov=True)
