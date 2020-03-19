@@ -23,6 +23,7 @@ class Trainer:
     def __init__(self, model, optimizer, train_iter, val_iter, opt):
         self.model = model
         self.optimizer = optimizer
+        self.scheduler = torch.optim.lr_scheduler.LambdaLR(self.optimizer, self.lr_schedule) 
         self.train_iter = train_iter
         self.val_iter = val_iter
         self.opt = opt
@@ -34,7 +35,7 @@ class Trainer:
         """
             run one train epoch
         """
-        self.optimizer.lr = self.lr_schedule(epoch)
+         
         train_loss = 0
         train_acc = 0
         for i, (x_array, t_array) in enumerate(self.train_iter):
@@ -101,8 +102,7 @@ class Trainer:
 
     def lr_schedule(self, epoch):
         divide_epoch = np.array([self.opt.nEpochs * i for i in self.opt.schedule])
-        print(divide_epoch)
-        print(epoch)
+
         decay = sum(epoch > divide_epoch)
         if epoch <= self.opt.warmup:
             decay = 1

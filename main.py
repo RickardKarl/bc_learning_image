@@ -34,8 +34,11 @@ def train(opt, trial):
     trainer = Trainer(model, optimizer, train_iter, val_iter, opt)
 
     for epoch in range(1, opt.nEpochs + 1):
+        print(trainer.optimizer)
+        print(trainer.scheduler)
         train_loss, train_top1 = trainer.train(epoch)
         val_top1 = trainer.val()
+        trainer.scheduler.step()
         sys.stderr.write('\r\033[K')
         sys.stdout.write(
             '| Epoch: {}/{} | Train: LR {}  Loss {:.3f}  top1 {:.2f} | Val: top1 {:.2f}\n'.format(
