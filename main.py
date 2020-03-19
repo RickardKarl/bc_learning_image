@@ -40,7 +40,7 @@ def train(opt, trial):
         sys.stderr.write('\r\033[K')
         sys.stdout.write(
             '| Epoch: {}/{} | Train: LR {}  Loss {:.3f}  top1 {:.2f} | Val: top1 {:.2f}\n'.format(
-                epoch, opt.nEpochs, trainer.scheduler.get_last_lr().item(), train_loss, train_top1, val_top1))
+                epoch, opt.nEpochs, trainer.scheduler.get_last_lr()[0], train_loss, train_top1, val_top1))
         sys.stdout.flush()
 
     if opt.save != 'None':
