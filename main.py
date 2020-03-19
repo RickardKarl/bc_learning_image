@@ -34,8 +34,7 @@ def train(opt, trial):
     trainer = Trainer(model, optimizer, train_iter, val_iter, opt)
 
     for epoch in range(1, opt.nEpochs + 1):
-        print(trainer.optimizer)
-        print(trainer.scheduler)
+        print("Real LR", trainer.scheduler.get_lr())
         train_loss, train_top1 = trainer.train(epoch)
         val_top1 = trainer.val()
         trainer.scheduler.step()
