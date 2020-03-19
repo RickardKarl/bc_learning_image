@@ -34,14 +34,13 @@ def train(opt, trial):
     trainer = Trainer(model, optimizer, train_iter, val_iter, opt)
 
     for epoch in range(1, opt.nEpochs + 1):
-        print("Real LR", trainer.scheduler.get_lr())
         train_loss, train_top1 = trainer.train(epoch)
         val_top1 = trainer.val()
         trainer.scheduler.step()
         sys.stderr.write('\r\033[K')
         sys.stdout.write(
             '| Epoch: {}/{} | Train: LR {}  Loss {:.3f}  top1 {:.2f} | Val: top1 {:.2f}\n'.format(
-                epoch, opt.nEpochs, trainer.optimizer.lr, train_loss, train_top1, val_top1))
+                epoch, opt.nEpochs, trainer.scheduler.get_last_lr().item(), train_loss, train_top1, val_top1))
         sys.stdout.flush()
 
     if opt.save != 'None':
