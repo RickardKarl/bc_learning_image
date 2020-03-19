@@ -32,7 +32,6 @@ class Trainer:
 
         # Initialize learning rate schedule
         epoch_milestones = np.array([int(self.opt.nEpochs * i) for i in self.opt.schedule]) 
-        print(epoch_milestones)
         self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, epoch_milestones, gamma=0.1) 
 
     def train(self, epoch):
