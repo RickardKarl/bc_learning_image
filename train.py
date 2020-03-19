@@ -23,13 +23,16 @@ class Trainer:
     def __init__(self, model, optimizer, train_iter, val_iter, opt):
         self.model = model
         self.optimizer = optimizer
-        self.scheduler = torch.optim.lr_scheduler.LambdaLR(self.optimizer, self.lr_schedule) 
         self.train_iter = train_iter
         self.val_iter = val_iter
         self.opt = opt
         # self.n_batches = len(train_iter)
         self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
         self.start_time = time.time()
+
+        # Initialize learning rate schedule
+        epoch_milestones = np.array([self.opt.nEpochs * i for i in self.opt.schedule]) 
+        self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, epoch_milestones, gamma=0.1) 
 
     def train(self, epoch):
         """
