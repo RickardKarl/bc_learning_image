@@ -73,7 +73,7 @@ class Trainer:
 
             line = '* Epoch: {}/{} ({}/{}) | Train: LR {} | Time: {} (ETA: {})'.format(
                 epoch, self.opt.nEpochs, i + 1, self.n_batches,
-                self.optimizer.lr, utils.to_hms(elapsed_time), utils.to_hms(eta))
+                self.scheduler.get_last_lr(), utils.to_hms(elapsed_time), utils.to_hms(eta))
             sys.stderr.write('\r\033[K' + line)
             sys.stderr.flush()
 
