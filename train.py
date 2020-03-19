@@ -104,11 +104,3 @@ class Trainer:
 
         return val_top1
 
-    def lr_schedule(self, epoch):
-        divide_epoch = np.array([self.opt.nEpochs * i for i in self.opt.schedule])
-
-        decay = sum(epoch > divide_epoch)
-        if epoch <= self.opt.warmup:
-            decay = 1
-
-        return self.opt.LR * np.power(0.1, decay)
