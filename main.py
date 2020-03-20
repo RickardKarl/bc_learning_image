@@ -5,6 +5,7 @@
 
 import sys
 import os
+from datetime import datetime
 import torch
 
 import opts
@@ -32,7 +33,19 @@ def train(opt, trial):
 
     train_iter, val_iter = dataset.setup(opt)
     trainer = Trainer(model, optimizer, train_iter, val_iter, opt)
-
+    if opt.BC:
+        if opt.plus:
+            learning = 'BC+'
+        else:
+            learning = 'BC'
+    else:
+        learning = 'standard'
+    # Get current time
+    now = datetime.now() # current date and time
+    string_date = now.strftime("%d%H%M")
+    # Save file
+    filename = "{}_{}_trial{}_{}.th".format(learning, opt.dataset, trial, string_date)
+    print(filename)
     for epoch in range(1, opt.nEpochs + 1):
         train_loss, train_top1 = trainer.train(epoch)
         val_top1 = trainer.val()
@@ -44,6 +57,19 @@ def train(opt, trial):
         sys.stdout.flush()
 
     if opt.save != 'None':
+        # Get current learning method
+        if opt.BC:
+            if opt.plus:
+                learning = 'BC+'
+            else:
+                learning = 'BC'
+        else:
+            learning = 'standard'
+        # Get current time
+        now = datetime.now() # current date and time
+        string_date = now.strftime("%d%H%M")
+        # Save file
+        filename = "{}_{}_trial{}_{}.th".format(learning, opt.dataset, trial, string_date)
         torch.save(model.state_dict(), os.path.join(opt.save, 'checkpoint.th'))
 
 
