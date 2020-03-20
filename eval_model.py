@@ -65,7 +65,12 @@ if __name__ == "__main__":
 
         model = ConvNet(opt.nClasses)
         model.load_state_dict(torch.load(path, map_location=device))
-    
+
+
+        line = "Loading model {} and evaluating".format(path)
+        sys.stderr.write('\r\033[K' + line)
+        sys.stderr.flush()
+
         trainer = Trainer(model, None, train_iter, val_iter, opt)
         error_rate = trainer.val()
 
