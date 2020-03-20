@@ -1,5 +1,7 @@
 import sys
 import argparse
+from os import walk
+from os.path import isfile, join
 
 import torch
 from torch import cuda
@@ -13,7 +15,7 @@ def eval_parse():
     parser = argparse.ArgumentParser(description='Evaluate model from checkpoint')
 
     # General settings
-    parser.add_argument('--checkpoint', required=True, help='Path to checkpoint')
+    parser.add_argument('--checkpoint', required=True, help='Path to folder with models')
     parser.add_argument('--dataset', required=True, choices=['cifar10', 'cifar100'])
     parser.add_argument('--data', required=True, help='Path to dataset')
 
@@ -31,7 +33,23 @@ def eval_parse():
         opt.nClasses = 100
 
     return opt
-    
+
+def get_model_paths(folder):
+
+    file_list = []
+
+    # Walks through folder and searcher for files ending with .th
+    for (dirpath, dirnames, filenames) in walk(folder):
+        for f in filenames:
+
+            f = join(dirpath, f)
+            if f not in file_list and f.endswith(".th"):
+                file_list.append(f)
+
+    if len(file_list) == 0:
+        raise ValueError("Empty list of checkpoints")
+
+    return file_list
 
 if __name__ == "__main__":
 
@@ -40,10 +58,15 @@ if __name__ == "__main__":
     device = torch.device("cuda" if cuda.is_available() else "cpu")
     train_iter, val_iter = dataset.setup(opt)
 
-    model = ConvNet(opt.nClasses)
-    model.load_state_dict(torch.load(opt.checkpoint, map_location=device))
-    
-    trainer = Trainer(model, None, train_iter, val_iter, opt)
-    error_rate = trainer.val()
+    # Get list of model paths
+    checkpoints = get_model_paths(opt.checkpoint) 
 
-    print("Error rate: {} | Filename: {}".format(error_rate, opt.checkpoint))
+    for path in checkpoints:
+
+        model = ConvNet(opt.nClasses)
+        model.load_state_dict(torch.load(path, map_location=device))
+    
+        trainer = Trainer(model, None, train_iter, val_iter, opt)
+        error_rate = trainer.val()
+
+        print("Error rate: {} | Model: {}".format(error_rate, path))
