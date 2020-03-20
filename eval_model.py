@@ -67,11 +67,13 @@ if __name__ == "__main__":
         model.load_state_dict(torch.load(path, map_location=device))
 
 
-        line = "Loading model {:.2f} and evaluating".format(path)
+        line = "Loading/evaluating model {:.2f}".format(path)
         sys.stderr.write('\r\033[K' + line)
         sys.stderr.flush()
 
         trainer = Trainer(model, None, train_iter, val_iter, opt)
         error_rate = trainer.val()
 
-        print("Error rate: {} | Model: {}".format(error_rate, path))
+        line ="Error rate: {} | Model: {}\n".format(error_rate, path)
+        sys.stderr.write('\r\033[K' + line)
+        sys.stderr.flush()
