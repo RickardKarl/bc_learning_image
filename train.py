@@ -31,8 +31,9 @@ class Trainer:
         self.start_time = time.time()
 
         # Initialize learning rate schedule
-        epoch_milestones = np.array([int(self.opt.nEpochs * i) for i in self.opt.schedule]) 
-        self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, epoch_milestones, gamma=0.1) 
+        if optimizer != None:
+            epoch_milestones = np.array([int(self.opt.nEpochs * i) for i in self.opt.schedule]) 
+            self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, epoch_milestones, gamma=0.1) 
 
     def train(self, epoch):
         """
@@ -87,7 +88,7 @@ class Trainer:
         val_acc = 0
         for (x_array, t_array) in self.val_iter:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
-
+            
             # Disable gradient computation during validation
             with torch.no_grad(): 
                 x = x_array.to(device)
