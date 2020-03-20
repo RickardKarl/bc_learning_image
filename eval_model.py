@@ -67,7 +67,7 @@ if __name__ == "__main__":
         model.load_state_dict(torch.load(path, map_location=device))
 
 
-        line = "Loading model {} and evaluating".format(path)
+        line = "Loading model {:.2f} and evaluating".format(path)
         sys.stderr.write('\r\033[K' + line)
         sys.stderr.flush()
 
