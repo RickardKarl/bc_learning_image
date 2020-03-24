@@ -44,10 +44,8 @@ class ImageDataset(torch.utils.data.Dataset):
                      U.padding(4),
                      U.random_crop(32),
                      ]
-            print("Data aug")
         else:
             funcs = [normalize(self.mean, self.std)]
-            print("no Data aug")
 
         return funcs
 

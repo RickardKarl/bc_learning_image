@@ -79,4 +79,5 @@ def display_info(opt):
     print('| schedule : {}'.format(opt.schedule))
     print('| warmup   : {}'.format(opt.warmup))
     print('| batchSize: {}'.format(opt.batchSize))
+    print('| Data Augmentation: {}'.format(!opt.noDataAug))
     print('+------------------------------+')
