@@ -63,11 +63,10 @@ def train(opt, trial):
                 epoch, opt.nEpochs, trainer.scheduler.get_last_lr()[0], train_loss, train_top1, val_top1))
         sys.stdout.flush()
 
-        print("Best val error: {}, current error {}".format(best_val_error, val_top1))
         if val_top1 < best_val_error:
             best_val_error = val_top1
             if opt.save != 'None':
-                print("Saving new model")
+                print("New best validation error rate: {} (Saved checkpoint)".format(best_val_error))
                 torch.save(model.state_dict(), os.path.join(opt.save, filename))
         
     return best_val_error
