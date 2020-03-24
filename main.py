@@ -20,10 +20,29 @@ def main():
         torch.cuda.set_device(opt.gpu)
     for i in range(1, opt.nTrials + 1):
         print('+-- Trial {} --+'.format(i))
-        train(opt, i)
+        best_val_error = train(opt, i)
+        print("Best validation rate: {}".format(best_val_error))
 
 
 def train(opt, trial):
+
+    # Get filename for saving model
+    if opt.BC:
+        if opt.plus:
+            learning = 'BC+'
+        else:
+            learning = 'BC'
+    else:
+        learning = 'standard'
+    # Get current time
+    now = datetime.now() # current date and time
+    string_date = now.strftime("%d%H%M")
+    # Save filename
+    filename = "{}_{}_trial{}_{}.th".format(learning, opt.dataset, trial, string_date)
+
+    # Keep track of best validation error rate
+    best_val_error = 100.0
+
     model = getattr(models, opt.netType)(opt.nClasses)
     if opt.noGPU == False:
         model.cuda()
@@ -44,21 +63,14 @@ def train(opt, trial):
                 epoch, opt.nEpochs, trainer.scheduler.get_last_lr()[0], train_loss, train_top1, val_top1))
         sys.stdout.flush()
 
-    if opt.save != 'None':
-        # Get current learning method
-        if opt.BC:
-            if opt.plus:
-                learning = 'BC+'
-            else:
-                learning = 'BC'
-        else:
-            learning = 'standard'
-        # Get current time
-        now = datetime.now() # current date and time
-        string_date = now.strftime("%d%H%M")
-        # Save file
-        filename = "{}_{}_trial{}_{}.th".format(learning, opt.dataset, trial, string_date)
-        torch.save(model.state_dict(), os.path.join(opt.save, filename))
+        if val_top1 < best_val_error:
+            best_val_error = val_top1
+            if opt.save != 'None':
+                print("New best validation error rate: {} (Saved checkpoint)".format(best_val_error))
+                torch.save(model.state_dict(), os.path.join(opt.save, filename))
+        
+    return best_val_error
+
 
 
 if __name__ == '__main__':
