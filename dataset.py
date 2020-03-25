@@ -78,7 +78,7 @@ class ImageDataset(torch.utils.data.Dataset):
 
             # Mix two labels
             if self.opt.label == 'single':
-                label = labels.ablation_single_label(label1, label2, r, self.opt.nClasses)
+                label = labels.ablation_single_label(label1, label2, r)
             elif self.opt.label == 'multi':
                 label = labels.ablation_multi_label(label1, label2, self.opt.nClasses)
             else: # proposed ratio label

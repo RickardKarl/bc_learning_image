@@ -12,10 +12,9 @@ Different labels that are applied to the mixed image (in BC+ learning)
 
 
 # Single label with softmax cross entropy loss
-def ablation_single_label(label1, label2, r, nClasses):
+def ablation_single_label(label1, label2, r):
     # Mix two labels
-    eye = np.eye(nClasses)
-    label = eye[label1].astype(np.float32) if r > 0.5 else eye[label2].astype(np.float32)
+    label = np.array(label1, dtype=np.int32) if r > 0.5 else np.array(label2, dtype=np.int32)
 
     return label
 
