@@ -5,6 +5,7 @@ import _pickle as cPickle
 import torch
 
 import utils as U
+import ablation_analysis.labels as labels
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -76,8 +77,12 @@ class ImageDataset(torch.utils.data.Dataset):
                 image = (image1 * r + image2 * (1 - r)).astype(np.float32)
 
             # Mix two labels
-            eye = np.eye(self.opt.nClasses)
-            label = (eye[label1] * r + eye[label2] * (1 - r)).astype(np.float32)
+            if self.opt.label == 'single':
+                label = labels.ablation_single_label(label1, label2, r, self.opt.nClasses)
+            elif self.opt.label == 'multi':
+                label = labels.ablation_multi_label(label1, label2, self.opt.nClasses)
+            else: # proposed ratio label
+                label = labels.ablation_ratio_label(label1, label2, r, self.opt.nClasses)
 
         else:  # Training phase of standard learning or testing phase
             image, label = self.base[i]

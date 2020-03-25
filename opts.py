@@ -25,6 +25,9 @@ def parse():
     parser.add_argument('--weightDecay', type=float, default=5e-4)
     parser.add_argument('--momentum', type=float, default=0.9)
 
+    # Ablation analysis settings
+    parser.add_argument('--label', required=True, choices=['single', 'multi', 'ratio'], default='ratio')
+
     opt = parser.parse_args()
     if opt.plus and not opt.BC:
         raise Exception('Using only --plus option is invalid.')

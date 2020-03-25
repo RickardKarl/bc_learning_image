@@ -7,6 +7,7 @@ import time
 from sklearn.metrics import accuracy_score
 
 import utils
+import ablation_analysis.labels as labels
 
 
 def accuracy(y, t):
@@ -50,11 +51,19 @@ class Trainer:
             t = t_array.to(device)
             y = self.model(x)
             if self.opt.BC:
-                t = t.to(device, dtype=torch.float32)
-                y = y.to(device, dtype=torch.float32)
-                loss = utils.kl_divergence(y, t)
-                t_indices = torch.argmax(t, dim=1)
-                acc = accuracy(y.data, t_indices)
+                if self.opt.label == 'single':
+                    t = t.to(device, dtype=torch.int64)
+                    loss = labels.ablation_single_loss(y, t)
+                    acc = accuracy(y.data, t)
+                elif self.opt.label == 'multi':
+                    loss = labels.ablation_multi_loss(y, t)
+                    acc = accuracy(y.data, t)
+                else: # KL loss for proposed ratio label
+                    t = t.to(device, dtype=torch.float32)
+                    y = y.to(device, dtype=torch.float32)
+                    loss = labels.ablation_ratio_loss(y, t)
+                    t_indices = torch.argmax(t, dim=1)
+                    acc = accuracy(y.data, t_indices)
             else:
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
                 t = t.to(device, dtype=torch.int64)
