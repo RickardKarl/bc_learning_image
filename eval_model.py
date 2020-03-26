@@ -68,6 +68,7 @@ if __name__ == "__main__":
 
         model = ConvNet(opt.nClasses)
         model.load_state_dict(torch.load(path, map_location=device))
+        model = model.to(device)
 
 
         line = "Loading/evaluating model {}".format(path)
