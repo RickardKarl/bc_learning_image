@@ -19,10 +19,13 @@ def eval_parse():
     parser.add_argument('--dataset', required=True, choices=['cifar10', 'cifar100'])
     parser.add_argument('--data', required=True, help='Path to dataset')
 
+
     # Additional settings
     parser.add_argument('--BC', action='store_true', help='BC learning')
     parser.add_argument('--plus', action='store_true', help='Use BC+')
     parser.add_argument('--batchSize', type=int, default=128)
+    parser.add_argument('--noDataAug', action='store_true', help='If no data augmentation was used')
+
 
     opt = parser.parse_args()
 
