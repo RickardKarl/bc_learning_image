@@ -57,7 +57,8 @@ class Trainer:
                     acc = accuracy(y.data, t)
                 elif self.opt.label == 'multi':
                     loss = labels.ablation_multi_loss(y, t)
-                    acc = accuracy(y.data, t)
+                    t_indices = torch.argmax(t, dim=1)
+                    acc = accuracy(y.data, t_indices)
                 else: # KL loss for proposed ratio label
                     t = t.to(device, dtype=torch.float32)
                     y = y.to(device, dtype=torch.float32)
