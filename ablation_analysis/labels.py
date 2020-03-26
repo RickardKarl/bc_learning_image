@@ -1,6 +1,6 @@
 import numpy as np
-import random
 import utils
+import torch
 import torch.nn.functional as F
 
 """
@@ -35,7 +35,7 @@ def ablation_multi_label(label1, label2, nClasses):
 
 
 def ablation_multi_loss(y, t):
-    loss = F.binary_cross_entropy(F.sigmoid(y), F.sigmoid(t))
+    loss = F.binary_cross_entropy(torch.sigmoid(y), t)
 
     return loss
 
