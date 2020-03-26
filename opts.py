@@ -24,6 +24,10 @@ def parse():
     parser.add_argument('--batchSize', type=int, default=-1)
     parser.add_argument('--weightDecay', type=float, default=5e-4)
     parser.add_argument('--momentum', type=float, default=0.9)
+    
+    # Experiment / ablation analysis parameters
+    parser.add_argument('--noDataAug', action='store_true', help='Disable data augmentation')
+
 
     opt = parser.parse_args()
     if opt.plus and not opt.BC:
@@ -75,4 +79,5 @@ def display_info(opt):
     print('| schedule : {}'.format(opt.schedule))
     print('| warmup   : {}'.format(opt.warmup))
     print('| batchSize: {}'.format(opt.batchSize))
+    print('| Data Augmentation: {}'.format("No" if opt.noDataAug else "Yes"))
     print('+------------------------------+')

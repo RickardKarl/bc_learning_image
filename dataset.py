@@ -38,7 +38,7 @@ class ImageDataset(torch.utils.data.Dataset):
             normalize = U.zero_mean
         else:
             normalize = U.normalize
-        if self.train:
+        if self.train and self.opt.noDataAug != True:
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
                      U.padding(4),
