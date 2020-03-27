@@ -24,6 +24,7 @@ def parse():
     parser.add_argument('--batchSize', type=int, default=-1)
     parser.add_argument('--weightDecay', type=float, default=5e-4)
     parser.add_argument('--momentum', type=float, default=0.9)
+    parser.add_argument('--mixedClasses', type=int, default=2)
     
     # Experiment / ablation analysis parameters
     parser.add_argument('--noDataAug', action='store_true', help='Disable data augmentation')
@@ -32,6 +33,8 @@ def parse():
     opt = parser.parse_args()
     if opt.plus and not opt.BC:
         raise Exception('Using only --plus option is invalid.')
+
+    print(opt.mixedClasses)
 
     # Dataset details
     if opt.dataset == 'cifar10':
