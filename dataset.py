@@ -57,27 +57,52 @@ class ImageDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
         if self.mix:  # Training phase of BC learning
+            if self.opt.mixedClasses == 23:
+                numSamples = random.randint(2, 3)
+            else:
+                numSamples = 2
+            
             while True:  # Select two training examples
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
                 image2, label2 = self.base[random.randint(0, len(self.base) - 1)]
-                if label1 != label2:
+                if self.opt.mixedClasses == 1: # N = 1
+                    if label1 == label2:
+                        break
+                elif self.opt.mixedClasses == 12: # N = 1 or 2
                     break
+                elif self.opt.mixedClasses == 2: # N = 2
+                    if label1 != label2:
+                        break
+                elif self.opt.mixedClasses == 23: # N = 2 or 3
+                    if numSamples == 2 and label1 != label2:
+                        break
+                    elif numSamples == 3:
+                        image3, label3 = self.base[random.randint(0, len(self.base) - 1)]
+                        if label1 != label2 and label1 != label3 and label3 != label2:
+                            break
+                elif self.opt.mixedClasses == 3: # N = 3
+                    if label1 != label2:
+                        break
+                
             image1 = self.preprocess(image1)
             image2 = self.preprocess(image2)
+            if numSamples == 2:
+                # Mix two images
+                r = np.array(random.random())
+                if self.opt.plus:
+                    g1 = np.std(image1)
+                    g2 = np.std(image2)
+                    p = 1.0 / (1 + g1 / g2 * (1 - r) / r)
+                    image = ((image1 * p + image2 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
+                else:
+                    image = (image1 * r + image2 * (1 - r)).astype(np.float32)
 
-            # Mix two images
-            r = np.array(random.random())
-            if self.opt.plus:
-                g1 = np.std(image1)
-                g2 = np.std(image2)
-                p = 1.0 / (1 + g1 / g2 * (1 - r) / r)
-                image = ((image1 * p + image2 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
+                # Mix two labels
+                eye = np.eye(self.opt.nClasses)
+                label = (eye[label1] * r + eye[label2] * (1 - r)).astype(np.float32)
+                
             else:
-                image = (image1 * r + image2 * (1 - r)).astype(np.float32)
-
-            # Mix two labels
-            eye = np.eye(self.opt.nClasses)
-            label = (eye[label1] * r + eye[label2] * (1 - r)).astype(np.float32)
+                image3 = self.preprocess(image3)
 
         else:  # Training phase of standard learning or testing phase
             image, label = self.base[i]
