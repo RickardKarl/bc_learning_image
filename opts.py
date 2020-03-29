@@ -80,4 +80,5 @@ def display_info(opt):
     print('| warmup   : {}'.format(opt.warmup))
     print('| batchSize: {}'.format(opt.batchSize))
     print('| Data Augmentation: {}'.format("No" if opt.noDataAug else "Yes"))
+    print('| Mixing method: {}'.format(opt.mixing if opt.mixing != None else "None"))
     print('+------------------------------+')
