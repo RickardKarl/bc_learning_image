@@ -78,10 +78,10 @@ class ImageDataset(torch.utils.data.Dataset):
             
             elif self.opt.mixing == 'a':
                 image = ablation_mix_a(image1, image2, r=r)
-
+                print("Using mixing method a")
             elif self.opt.mixing == 'ab':
                 image = ablation_mix_ab(image1, image2, r=r)
-
+                print("Using mixing method ab")
             elif self.opt.mixing == 'bc':
                 image = ablation_mix_bc(image1, image2, r=r)
 
