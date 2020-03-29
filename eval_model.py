@@ -25,7 +25,7 @@ def eval_parse():
     parser.add_argument('--plus', action='store_true', help='Use BC+')
     parser.add_argument('--batchSize', type=int, default=128)
     parser.add_argument('--noDataAug', action='store_true', help='If no data augmentation was used')
-
+    parser.add_argument('--mixing', type=str, default=None, help='Decide which mixing method for ablation')
 
     opt = parser.parse_args()
 
