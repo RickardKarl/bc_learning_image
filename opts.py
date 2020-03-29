@@ -67,7 +67,7 @@ def display_info(opt):
             learning = 'BC'
     else:a
         learning = 'standard'
-    print(opt.mixing)
+        
     print('+------------------------------+')
     print('| CIFAR classification')
     print('+------------------------------+')

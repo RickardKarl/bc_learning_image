@@ -44,9 +44,10 @@ def ablation_mix_a(image1, image2, r = None):
     return image
 
 # Implements (a), (b)
-def ablation_mix_ab(image1, image2): 
-
-    r = np.array(random.random())
+def ablation_mix_ab(image1, image2, r = None): 
+    
+    if r == None:
+        r = np.array(random.random())
 
     # Get image with (a) criteria
     image = ablation_mix_a(image1, image2, r = r)

@@ -5,6 +5,7 @@ import _pickle as cPickle
 import torch
 
 import utils as U
+from ablation_analysis.mixing_methods import ablation_mix_a, ablation_mix_ab, ablation_mix_bc
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -57,11 +58,13 @@ class ImageDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
         if self.mix:  # Training phase of BC learning
+
             while True:  # Select two training examples
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
                 image2, label2 = self.base[random.randint(0, len(self.base) - 1)]
                 if label1 != label2:
                     break
+
             image1 = self.preprocess(image1)
             image2 = self.preprocess(image2)
 
@@ -72,6 +75,16 @@ class ImageDataset(torch.utils.data.Dataset):
                 g2 = np.std(image2)
                 p = 1.0 / (1 + g1 / g2 * (1 - r) / r)
                 image = ((image1 * p + image2 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
+            
+            elif self.opt.mixing == 'a':
+                image = ablation_mix_a(image1, image2, r=r)
+
+            elif self.opt.mixing == 'ab':
+                image = ablation_mix_ab(image1, image2, r=r)
+
+            elif self.opt.mixing == 'bc':
+                image = ablation_mix_bc(image1, image2, r=r)
+
             else:
                 image = (image1 * r + image2 * (1 - r)).astype(np.float32)
 
