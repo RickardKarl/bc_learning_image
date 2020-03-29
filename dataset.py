@@ -13,7 +13,7 @@ class ImageDataset(torch.utils.data.Dataset):
         self.base = list(zip(images, labels)) # Might not work
         self.opt = opt
         self.train = train
-        self.mix = (opt.BC and train)
+        self.mix = (opt.BC and train) or (self.opt.mixing != None)
         if opt.dataset == 'cifar10':
             if opt.plus:
                 self.mean = np.array([4.60, 2.24, -6.84])
@@ -58,7 +58,7 @@ class ImageDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
 
-        if self.mix or self.opt.mixing != None:  # Training phase of BC learning
+        if self.mix:  # Training phase of BC learning
             while True:  # Select two training examples
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
                 image2, label2 = self.base[random.randint(0, len(self.base) - 1)]
