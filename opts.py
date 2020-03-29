@@ -27,7 +27,7 @@ def parse():
     
     # Experiment / ablation analysis parameters
     parser.add_argument('--noDataAug', action='store_true', help='Disable data augmentation')
-    parser.add_argument('--mixing', type=string, default=None, help='Decide which mixing method for ablation')
+    parser.add_argument('--mixing', type=str, default=None, help='Decide which mixing method for ablation')
 
     opt = parser.parse_args()
     if opt.plus and not opt.BC:
