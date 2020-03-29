@@ -65,7 +65,7 @@ def display_info(opt):
             learning = 'BC+'
         else:
             learning = 'BC'
-    else:a
+    else:
         learning = 'standard'
         
     print('+------------------------------+')
