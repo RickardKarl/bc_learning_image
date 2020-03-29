@@ -49,7 +49,7 @@ class Trainer:
             x = x_array.to(device)
             t = t_array.to(device)
             y = self.model(x)
-            if self.opt.BC or self.mixing != None:
+            if self.opt.BC or self.opt.mixing != None:
                 t = t.to(device, dtype=torch.float32)
                 y = y.to(device, dtype=torch.float32)
                 loss = utils.kl_divergence(y, t)
