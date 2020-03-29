@@ -17,7 +17,7 @@ def ablation_mix(image1, image2):
 
     # Mix images
     r = np.array(random.random())
-    image = (image1 * r + image * (1 - r)).astype(np.float32)
+    image = (image1 * r + image2 * (1 - r)).astype(np.float32)
 
     return image
 
@@ -39,13 +39,13 @@ def ablation_mix_a(image1, image2, r = None):
     # Mix images
     if r == None:
         r = np.array(random.random())
-    image = (image1 * r + image * (1 - r)).astype(np.float32)
+    image = (image1 * r + image2 * (1 - r)).astype(np.float32)
 
     return image
 
 # Implements (a), (b)
 def ablation_mix_ab(image1, image2, r = None): 
-    
+
     if r == None:
         r = np.array(random.random())
 
@@ -70,7 +70,7 @@ def ablation_mix_bc(image1, image2, r = None):
     std2 = np.std(image2)
     p = 1 / ( 1 + std1/std2 * (1 - r)/r )
     
-    image = (image1 * p + image * (1 - p)).astype(np.float32)
+    image = (image1 * p + image2 * (1 - p)).astype(np.float32)
     image = image / np.sqrt( p**2 + (1 - p)**2 )
     ###
 
