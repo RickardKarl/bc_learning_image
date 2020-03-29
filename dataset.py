@@ -13,7 +13,7 @@ class ImageDataset(torch.utils.data.Dataset):
         self.base = list(zip(images, labels)) # Might not work
         self.opt = opt
         self.train = train
-        self.mix = ((opt.B or self.opt.mixing != None) and train)
+        self.mix = ((opt.BC or self.opt.mixing != None) and train)
         if opt.dataset == 'cifar10':
             if opt.plus:
                 self.mean = np.array([4.60, 2.24, -6.84])
