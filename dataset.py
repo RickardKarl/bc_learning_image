@@ -57,8 +57,8 @@ class ImageDataset(torch.utils.data.Dataset):
         return image
 
     def __getitem__(self, i):
-        if self.mix:  # Training phase of BC learning
 
+        if self.mix or self.mixing != None:  # Training phase of BC learning
             while True:  # Select two training examples
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
                 image2, label2 = self.base[random.randint(0, len(self.base) - 1)]
@@ -75,7 +75,6 @@ class ImageDataset(torch.utils.data.Dataset):
                 g2 = np.std(image2)
                 p = 1.0 / (1 + g1 / g2 * (1 - r) / r)
                 image = ((image1 * p + image2 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
-            
             elif self.opt.mixing == 'a':
                 image = ablation_mix_a(image1, image2, r=r)
                 print("Using mixing method a")
