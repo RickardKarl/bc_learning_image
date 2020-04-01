@@ -59,6 +59,8 @@ class ImageDataset(torch.utils.data.Dataset):
         if self.mix:  # Training phase of BC learning
             if self.opt.mixedClasses == 23:
                 numSamples = random.randint(2, 3)
+            elif self.opt.mixedClasses == 3:
+                numSamples = 3
             else:
                 numSamples = 2
             
@@ -81,12 +83,14 @@ class ImageDataset(torch.utils.data.Dataset):
                         if label1 != label2 and label1 != label3 and label3 != label2:
                             break
                 elif self.opt.mixedClasses == 3: # N = 3
-                    if label1 != label2:
+                    image3, label3 = self.base[random.randint(0, len(self.base) - 1)]
+                        if label1 != label2 and label1 != label3 and label3 != label2:
                         break
                 
             image1 = self.preprocess(image1)
             image2 = self.preprocess(image2)
             if numSamples == 2:
+                print(numSamples)
                 # Mix two images
                 r = np.array(random.random())
                 if self.opt.plus:
@@ -101,8 +105,32 @@ class ImageDataset(torch.utils.data.Dataset):
                 eye = np.eye(self.opt.nClasses)
                 label = (eye[label1] * r + eye[label2] * (1 - r)).astype(np.float32)
                 
-            else:
+            else: # numsamples == 3
+                print(numSamples)
                 image3 = self.preprocess(image3)
+
+                # Mix three images
+                r = np.random.dirichlet(np.ones(3),size=1)[0]
+                if self.opt.plus:
+                    g1 = np.std(image1)
+                    g2 = np.std(image2)
+                    g3 = np.std(image3)
+
+                    # Mix first two images
+                    p = 1.0 / (1 + g1 / g2 * r[1] / r[0])
+                    image12 = ((image1 * p + image2 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
+
+                    # Mix with third image
+                    g12 = np.std(image)
+                    p = 1.0 / (1 + g12 / g3 * r[2] / (r[0] + r[1]))
+                    image = ((image12 * p + image3 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
+
+                else: # NOT IMPLEMENTED
+                    image = (image1 * r + image2 * (1 - r)).astype(np.float32)
+
+                # Mix three labels
+                eye = np.eye(self.opt.nClasses)
+                label = (eye[label1] * r[0] + eye[label2] * r[1] + eye[label3] * r[2]).astype(np.float32)
 
         else:  # Training phase of standard learning or testing phase
             image, label = self.base[i]
