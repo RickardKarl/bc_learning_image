@@ -84,7 +84,7 @@ class ImageDataset(torch.utils.data.Dataset):
                             break
                 elif self.opt.mixedClasses == 3: # N = 3
                     image3, label3 = self.base[random.randint(0, len(self.base) - 1)]
-                        if label1 != label2 and label1 != label3 and label3 != label2:
+                    if label1 != label2 and label1 != label3 and label3 != label2:
                         break
                 
             image1 = self.preprocess(image1)
