@@ -90,7 +90,6 @@ class ImageDataset(torch.utils.data.Dataset):
             image1 = self.preprocess(image1)
             image2 = self.preprocess(image2)
             if numSamples == 2:
-                print(numSamples)
                 # Mix two images
                 r = np.array(random.random())
                 if self.opt.plus:
@@ -106,7 +105,6 @@ class ImageDataset(torch.utils.data.Dataset):
                 label = (eye[label1] * r + eye[label2] * (1 - r)).astype(np.float32)
                 
             else: # numsamples == 3
-                print(numSamples)
                 image3 = self.preprocess(image3)
 
                 # Mix three images
