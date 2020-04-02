@@ -121,7 +121,7 @@ class ImageDataset(torch.utils.data.Dataset):
                     image12 = ((image1 * p + image2 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
 
                     # Mix with third image
-                    g12 = np.std(image)
+                    g12 = np.std(image12)
                     p = 1.0 / (1 + g12 / g3 * r[2] / (r[0] + r[1]))
                     image = ((image12 * p + image3 * (1 - p)) / np.sqrt(p ** 2 + (1 - p) ** 2)).astype(np.float32)
 
