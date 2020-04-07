@@ -48,6 +48,7 @@ class Trainer:
 
             x = x_array.to(device)
             t = t_array.to(device)
+            print(x.size())
             y = self.model(x)
             if self.opt.BC:
                 t = t.to(device, dtype=torch.float32)
