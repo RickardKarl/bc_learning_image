@@ -5,12 +5,11 @@ import _pickle as cPickle
 from PIL import Image
 import numpy as np
 
-# TODO: Convert labels to integers
 # TODO: Change dataset.py Correctly
 # TODO: Save learning loss
 
 train_size = 0.8
-excluded_labels = []
+excluded_labels = ['Faces', 'BACKGROUND_Google'] # there exists Faces_easy which we only use for now
 
 if __name__ == "__main__":
     folder = sys.argv[1]
@@ -18,6 +17,8 @@ if __name__ == "__main__":
 
     # Get labels and path_images
     labels = os.listdir(folder)
+    for el in excluded_labels:
+        labels.remove(el)
 
     label_to_image = {}
     for l in labels:
@@ -28,6 +29,12 @@ if __name__ == "__main__":
             for f in files:
                 flist.append(join(label_path, f))
             label_to_image[l] = flist
+    # Map label to int
+    label_to_int = {}
+    index = 0
+    for k in label_to_image.keys():
+        label_to_int[k] = index
+        index += 1
 
     # Save all data in the following dict
     images_train = []
@@ -47,7 +54,7 @@ if __name__ == "__main__":
             arr = np.asarray(image)
             # Append to lists
             images_train.append(arr)
-            labels_train.append(l)
+            labels_train.append(label_to_int.get(l))
 
         # Test data
         for i in range(nbr_training_samples, len(image_paths)):
@@ -57,7 +64,7 @@ if __name__ == "__main__":
             arr = np.asarray(image)
             # Append to lists
             images_test.append(arr)
-            labels_test.append(l)
+            labels_test.append(label_to_int.get(l))
 
     dataset_dict_train = {}
     dataset_dict_train['data'] = images_train
