@@ -36,7 +36,9 @@ def parse():
     # Dataset details
     if opt.dataset == 'cifar10':
         opt.nClasses = 10
-    else:  # cifar100
+    elif opt.dataset == 'cifar100':  # cifar100
+        opt.nClasses = 100
+    else:
         opt.nClasses = 100
 
     # Default settings
@@ -47,6 +49,10 @@ def parse():
     default_settings['cifar100'] = {
         'convnet': {'nEpochs': 250, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 128}
     }
+    default_settings['caltech101'] = {
+        'convnet': {'nEpochs': 250, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 128}
+    }
+
     for key in ['nEpochs', 'LR', 'schedule', 'warmup', 'batchSize']:
         if eval('opt.{}'.format(key)) == -1:
             setattr(opt, key, default_settings[opt.dataset][opt.netType][key])
