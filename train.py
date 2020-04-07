@@ -48,7 +48,6 @@ class Trainer:
 
             x = x_array.to(device)
             t = t_array.to(device)
-            print(x.size())
             y = self.model(x)
             if self.opt.BC:
                 t = t.to(device, dtype=torch.float32)
@@ -95,7 +94,6 @@ class Trainer:
                 x = x_array.to(device)
                 t = t_array.to(device, dtype=torch.int64)
                 # TODO: figure out why to use softmax here since it also works fine without softmax
-                print(x.size())
                 y = F.softmax(self.model(x), dim=1)
 
             acc = accuracy(y.data, t)
