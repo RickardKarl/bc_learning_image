@@ -70,7 +70,7 @@ if __name__ == "__main__":
             labels_test.append(label_to_int.get(l))
 
     # Concatenate list of arrays into single array
-    images_train = np.array(images_train).reshape((-1, 3, basewidth, hsize))
+    images_train = np.array(images_train).reshape((-1, 3,basewidth, hsize))
     images_test = np.array(images_test).reshape((-1, 3, basewidth, hsize))
 
     # Save in dict
