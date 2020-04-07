@@ -5,11 +5,12 @@ import _pickle as cPickle
 from PIL import Image
 import numpy as np
 
-# TODO: Change dataset.py Correctly
 # TODO: Save learning loss
 
 train_size = 0.8
 excluded_labels = ['Faces', 'BACKGROUND_Google'] # there exists Faces_easy which we only use for now
+basewidth = 128
+hsize = 128
 
 if __name__ == "__main__":
     folder = sys.argv[1]
@@ -50,7 +51,8 @@ if __name__ == "__main__":
         for i in range(nbr_training_samples):
             p = image_paths[i]
             # Get image
-            image = Image.open(p)
+            image = Image.open(p).convert('RGB') # get RGB image
+            image = image.resize((basewidth,hsize)) # rescale
             arr = np.asarray(image)
             # Append to lists
             images_train.append(arr)
@@ -60,12 +62,19 @@ if __name__ == "__main__":
         for i in range(nbr_training_samples, len(image_paths)):
             p = image_paths[i]
             # Get image
-            image = Image.open(p)
+            image = Image.open(p).convert('RGB') # get RGB image
+            image = image.resize((basewidth,hsize)) # rescale
             arr = np.asarray(image)
             # Append to lists
             images_test.append(arr)
             labels_test.append(label_to_int.get(l))
 
+    # Concatenate list of arrays into single array
+    images_train = np.array(images_train)
+    images_test = np.array(images_test)
+
+
+    # Save in dict
     dataset_dict_train = {}
     dataset_dict_train['data'] = images_train
     dataset_dict_train['labels'] = labels_train
