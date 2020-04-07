@@ -50,7 +50,7 @@ def parse():
         'convnet': {'nEpochs': 250, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 128}
     }
     default_settings['caltech101'] = {
-        'convnet': {'nEpochs': 250, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 128}
+        'convnet': {'nEpochs': 250, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 64}
     }
 
     for key in ['nEpochs', 'LR', 'schedule', 'warmup', 'batchSize']:
