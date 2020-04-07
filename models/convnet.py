@@ -12,14 +12,14 @@ class ConvNet(nn.Module):
         super(ConvNet, self).__init__()
         self.conv11 = ConvBNReLU(3, 64, 27, pad=1)
         self.conv12 = ConvBNReLU(64, 64, 27, pad=1)
-        self.conv21 = ConvBNReLU(64, 128, 9, pad=1)
+        self.conv21 = ConvBNReLU(64, 128, 27, pad=1)
         self.conv22 = ConvBNReLU(128, 128, 3, pad=1)
         self.conv31 = ConvBNReLU(128, 256, 3, pad=1)
         self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
         self.conv33 = ConvBNReLU(256, 256, 3, pad=1)
         self.conv34 = ConvBNReLU(256, 256, 3, pad=1)
-        self.fc4 = nn.Linear(16, 4096)
-        self.fc5 = nn.Linear(4096, 1024)
+        self.fc4 = nn.Linear(16, 1024)
+        self.fc5 = nn.Linear(1024, 1024)
         self.fc6 = nn.Linear(1024, n_classes)
 
         self.train = True
