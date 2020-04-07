@@ -10,12 +10,12 @@ from models.convbnrelu import ConvBNReLU
 class ConvNet(nn.Module):
     def __init__(self, n_classes):
         super(ConvNet, self).__init__()
-        self.conv11 = ConvBNReLU(3, 64, 3, pad=1)
-        self.conv12 = ConvBNReLU(64, 64, 3, pad=1)
-        self.conv21 = ConvBNReLU(64, 128, 3, pad=1)
-        self.conv22 = ConvBNReLU(128, 128, 3, pad=1)
-        self.conv31 = ConvBNReLU(128, 256, 3, pad=1)
-        self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
+        self.conv11 = ConvBNReLU(3, 64, 53, pad=1)
+        self.conv12 = ConvBNReLU(64, 64, 53, pad=1)
+        self.conv21 = ConvBNReLU(64, 128, 53, pad=1)
+        self.conv22 = ConvBNReLU(128, 128, 53, pad=1)
+        self.conv31 = ConvBNReLU(128, 256, 17, pad=1)
+        self.conv32 = ConvBNReLU(256, 256, 11, pad=1)
         self.conv33 = ConvBNReLU(256, 256, 3, pad=1)
         self.conv34 = ConvBNReLU(256, 256, 3, pad=1)
         self.fc4 = nn.Linear(256 * 4 * 4, 1024)
