@@ -6,7 +6,7 @@ def parse():
     parser = argparse.ArgumentParser(description='BC learning for image classification')
 
     # General settings
-    parser.add_argument('--dataset', required=True, choices=['cifar10', 'cifar100'])
+    parser.add_argument('--dataset', required=True, choices=['cifar10', 'cifar100', 'caltech101'])
     parser.add_argument('--netType', required=True, choices=['convnet'])
     parser.add_argument('--data', required=True, help='Path to dataset')
     parser.add_argument('--nTrials', type=int, default=10)
