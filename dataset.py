@@ -102,10 +102,10 @@ def setup(opt):
         val_labels = val['labels']
     elif opt.dataset == 'caltech101':
         train = unpickle(os.path.join(opt.data, 'train'))
-        train_images = train['data'].reshape(-1, 3, 32, 32)
+        train_images = train['data']
         train_labels = train['labels']
         val = unpickle(os.path.join(opt.data, 'test'))
-        val_images = val['data'].reshape((-1, 3, 32, 32))
+        val_images = val['data']
         val_labels = val['labels']
 
     else:
