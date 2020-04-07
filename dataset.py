@@ -39,10 +39,14 @@ class ImageDataset(torch.utils.data.Dataset):
         else:
             normalize = U.normalize
         if self.train and self.opt.noDataAug != True:
+            if self.opt.dataset == 'caltech101':
+                size = 128
+            else:
+                size = 32
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
                      U.padding(4),
-                     U.random_crop(32),
+                     U.random_crop(size),
                      ]
         else:
             funcs = [normalize(self.mean, self.std)]
@@ -107,7 +111,6 @@ def setup(opt):
         val = unpickle(os.path.join(opt.data, 'test'))
         val_images = val['data']
         val_labels = val['labels']
-
     else:
         train = unpickle(os.path.join(opt.data, 'train'))
         train_images = train['data'].reshape(-1, 3, 32, 32)
