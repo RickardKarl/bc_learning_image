@@ -95,12 +95,16 @@ def setup(opt):
 
     if opt.dataset == 'cifar10':
         train = [unpickle(os.path.join(opt.data, 'data_batch_{}'.format(i))) for i in range(1, 6)]
-        print("Type ", type(train))
-        print("Dict ",train[0])
-        print("Keys ", type(train[0].keys()))
         train_images = np.concatenate([d['data'] for d in train]).reshape((-1, 3, 32, 32))
         train_labels = np.concatenate([d['labels'] for d in train])
         val = unpickle(os.path.join(opt.data, 'test_batch'))
+        val_images = val['data'].reshape((-1, 3, 32, 32))
+        val_labels = val['labels']
+    elif opt.dataset == 'caltech101':
+        train = unpickle(os.path.join(opt.data, 'train'))
+        train_images = train['data'].reshape(-1, 3, 32, 32)
+        train_labels = train['labels']
+        val = unpickle(os.path.join(opt.data, 'test'))
         val_images = val['data'].reshape((-1, 3, 32, 32))
         val_labels = val['labels']
     else:
