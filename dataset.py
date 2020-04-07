@@ -107,8 +107,7 @@ def setup(opt):
         val = unpickle(os.path.join(opt.data, 'test'))
         val_images = val['data'].reshape((-1, 3, 32, 32))
         val_labels = val['labels']
-        print(len(train_images))
-        print(len(train_labels))
+
     else:
         train = unpickle(os.path.join(opt.data, 'train'))
         train_images = train['data'].reshape(-1, 3, 32, 32)
