@@ -6,7 +6,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from models.convbnrelu import ConvBNReLU
 
-
 class ConvNet(nn.Module):
     def __init__(self, n_classes):
         super(ConvNet, self).__init__()
@@ -18,15 +17,65 @@ class ConvNet(nn.Module):
         self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
         self.conv33 = ConvBNReLU(256, 256, 3, pad=1)
         self.conv34 = ConvBNReLU(256, 256, 3, pad=1)
-        self.conv41 = ConvBNReLU(256, 256, 5, pad=1)
-        self.conv42 = ConvBNReLU(256, 512, 3, pad=1)
+        self.fc4 = nn.Linear(256 * 4 * 4, 1024)
+        self.fc5 = nn.Linear(1024, 1024)
+        self.fc6 = nn.Linear(1024, n_classes)
+
+        self.train = True
+
+    def forward(self, x):
+        h = self.conv11(x)
+        h = self.conv12(h)
+        h = F.max_pool2d(h, 2)
+
+        h = self.conv21(h)
+        h = self.conv22(h)
+        h = F.max_pool2d(h, 2)
+
+        h = self.conv31(h)
+        h = self.conv32(h)
+        h = self.conv33(h)
+        h = self.conv34(h)
+        h = F.max_pool2d(h, 2)
+
+        h = h.view(h.size(0), -1)
+
+        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
+        h = F.dropout(F.relu(self.fc5(h)), training=self.train)
+
+        return self.fc6(h)
+
+
+class VGG19(nn.Module):
+    def __init__(self, n_classes):
+        super(ConvNet, self).__init__()
+        # Block 1
+        self.conv11 = ConvBNReLU(3, 64, 3, pad=1)
+        self.conv12 = ConvBNReLU(64, 128, 3, pad=1)
+
+        # Block 2
+        self.conv21 = ConvBNReLU(128, 128, 3, pad=1)
+        self.conv22 = ConvBNReLU(128, 256, 3, pad=1)
+
+        # Block 3
+        self.conv31 = ConvBNReLU(256, 256, 3, pad=1)
+        self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
+        self.conv33 = ConvBNReLU(256, 256, 3, pad=1)
+        self.conv34 = ConvBNReLU(256, 512, 3, pad=1)
+
+        # Block 4
+        self.conv41 = ConvBNReLU(512, 512, 5, pad=1)
+        self.conv42 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv43 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv44 = ConvBNReLU(512, 512, 3, pad=1)
+
+        # Block 5
         self.conv51 = ConvBNReLU(512, 512, 5, pad=1)
         self.conv52 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv53 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv54 = ConvBNReLU(512, 128, 3, pad=1)
-        self.fc4 = nn.Linear(3200, 1024)
+
+        self.fc4 = nn.Linear(4*1024, 1024)
         self.fc5 = nn.Linear(1024, 1024)
         self.fc6 = nn.Linear(1024, n_classes)
 

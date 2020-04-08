@@ -7,7 +7,7 @@ def parse():
 
     # General settings
     parser.add_argument('--dataset', required=True, choices=['cifar10', 'cifar100', 'caltech101'])
-    parser.add_argument('--netType', required=True, choices=['convnet'])
+    parser.add_argument('--netType', required=True, choices=['convnet', 'vgg19'])
     parser.add_argument('--data', required=True, help='Path to dataset')
     parser.add_argument('--nTrials', type=int, default=10)
     parser.add_argument('--save', default='None', help='Directory to save the results')
@@ -50,7 +50,7 @@ def parse():
         'convnet': {'nEpochs': 250, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 128}
     }
     default_settings['caltech101'] = {
-        'convnet': {'nEpochs': 250, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 32}
+        'convnet': {'nEpochs': 50, 'LR': 0.1, 'schedule': [0.4, 0.6, 0.8], 'warmup': 0, 'batchSize': 32}
     }
 
     for key in ['nEpochs', 'LR', 'schedule', 'warmup', 'batchSize']:
