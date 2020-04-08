@@ -40,13 +40,16 @@ class ImageDataset(torch.utils.data.Dataset):
             normalize = U.normalize
         if self.train and self.opt.noDataAug != True:
             if self.opt.dataset == 'caltech101':
-                size = 128
+                width = 240
+                height = 180
             else:
-                size = 32
+                width = 32
+                height = None
+                
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
                      U.padding(4),
-                     U.random_crop(size),
+                     U.random_crop(width, height),
                      ]
         else:
             funcs = [normalize(self.mean, self.std)]
