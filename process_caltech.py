@@ -9,8 +9,8 @@ import numpy as np
 
 train_size = 0.8
 excluded_labels = ['Faces', 'BACKGROUND_Google'] # there exists Faces_easy which we only use for now
-basewidth = 128
-hsize = 128
+basewidth = 240
+hsize = 180
 
 if __name__ == "__main__":
     folder = sys.argv[1]
