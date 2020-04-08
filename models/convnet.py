@@ -64,13 +64,13 @@ class VGG19(nn.Module):
         self.conv34 = ConvBNReLU(256, 512, 3, pad=1)
 
         # Block 4
-        self.conv41 = ConvBNReLU(512, 512, 5, pad=1)
+        self.conv41 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv42 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv43 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv44 = ConvBNReLU(512, 512, 3, pad=1)
 
         # Block 5
-        self.conv51 = ConvBNReLU(512, 512, 5, pad=1)
+        self.conv51 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv52 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv53 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv54 = ConvBNReLU(512, 128, 3, pad=1)
