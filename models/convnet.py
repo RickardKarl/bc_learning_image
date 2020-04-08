@@ -16,7 +16,7 @@ class ConvNet(nn.Module):
         self.conv22 = ConvBNReLU(128, 128, 3, pad=1)
         self.conv31 = ConvBNReLU(128, 256, 3, pad=1)
         self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
-        self.conv33 = ConvBNReLU(128, 256, 3, pad=1)
+        self.conv33 = ConvBNReLU(256, 256, 3, pad=1)
         self.conv34 = ConvBNReLU(256, 256, 3, pad=1)
         self.conv41 = ConvBNReLU(256, 256, 5, pad=1)
         self.conv42 = ConvBNReLU(256, 512, 3, pad=1)
