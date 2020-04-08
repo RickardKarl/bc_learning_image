@@ -39,7 +39,7 @@ def parse():
     elif opt.dataset == 'cifar100':  # cifar100
         opt.nClasses = 100
     else:
-        opt.nClasses = 100
+        opt.nClasses = 101
 
     # Default settings
     default_settings = dict()
