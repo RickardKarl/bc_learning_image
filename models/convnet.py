@@ -75,7 +75,7 @@ class VGG19(nn.Module):
         self.conv53 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv54 = ConvBNReLU(512, 128, 3, pad=1)
 
-        self.fc4 = nn.Linear(4*1024, 1024)
+        self.fc4 = nn.Linear(6272, 1024)
         self.fc5 = nn.Linear(1024, 1024)
         self.fc6 = nn.Linear(1024, n_classes)
 

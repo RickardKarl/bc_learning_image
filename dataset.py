@@ -9,7 +9,7 @@ import utils as U
 
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, images, labels, opt, train=True):
-        self.base = list(zip(images, labels)) # Might not work
+        self.base = list(zip(images, labels))
         self.opt = opt
         self.train = train
         self.mix = (opt.BC and train)
@@ -111,6 +111,7 @@ def setup(opt):
         val = unpickle(os.path.join(opt.data, 'test_batch'))
         val_images = val['data'].reshape((-1, 3, 32, 32))
         val_labels = val['labels']
+        print(train_labels)
     elif opt.dataset == 'caltech101':
         train = unpickle(os.path.join(opt.data, 'train'))
         train_images = train['data']
@@ -118,6 +119,7 @@ def setup(opt):
         val = unpickle(os.path.join(opt.data, 'test'))
         val_images = val['data']
         val_labels = val['labels']
+        print(train_labels)
     else:
         train = unpickle(os.path.join(opt.data, 'train'))
         train_images = train['data'].reshape(-1, 3, 32, 32)
