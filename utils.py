@@ -10,15 +10,12 @@ def padding(pad):
     return f
 
 
-def random_crop(width, height = None):
-    width = width
-    if height == None:
-        height = width
+def random_crop(size):
     def f(image):
         _, h, w = image.shape
-        p = random.randint(0, h - height)
-        q = random.randint(0, w - width)
-        return image[:, p: p + height, q: q + width]
+        p = random.randint(0, h - size)
+        q = random.randint(0, w - size)
+        return image[:, p: p + size, q: q + size]
 
     return f
 
