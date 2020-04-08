@@ -48,7 +48,7 @@ class ConvNet(nn.Module):
 
 class VGG19(nn.Module):
     def __init__(self, n_classes):
-        super(ConvNet, self).__init__()
+        super(VGG19, self).__init__()
         # Block 1
         self.conv11 = ConvBNReLU(3, 64, 3, pad=1)
         self.conv12 = ConvBNReLU(64, 128, 3, pad=1)
