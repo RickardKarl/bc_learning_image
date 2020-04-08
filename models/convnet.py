@@ -16,8 +16,10 @@ class ConvNet(nn.Module):
         self.conv22 = ConvBNReLU(128, 128, 3, pad=1)
         self.conv31 = ConvBNReLU(128, 256, 3, pad=1)
         self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
-        self.conv33 = ConvBNReLU(256, 256, 5, pad=1)
-        self.conv34 = ConvBNReLU(256, 256, 3, pad=1)
+        self.conv41 = ConvBNReLU(256, 256, 5, pad=1)
+        self.conv42 = ConvBNReLU(256, 512, 3, pad=1)
+        self.conv51 = ConvBNReLU(512, 512, 5, pad=1)
+        self.conv52 = ConvBNReLU(512, 512, 3, pad=1)
         self.fc4 = nn.Linear(4096, 1024)
         self.fc5 = nn.Linear(1024, 1024)
         self.fc6 = nn.Linear(1024, n_classes)
@@ -39,9 +41,14 @@ class ConvNet(nn.Module):
         h = self.conv32(h)
         h = F.max_pool2d(h, 2)
         print(h.size())
-        
-        h = self.conv33(h)
-        h = self.conv34(h)
+
+        h = self.conv41(h)
+        h = self.conv42(h)
+        h = F.max_pool2d(h, 2)
+        print(h.size())
+
+        h = self.conv51(h)
+        h = self.conv52(h)
         h = F.max_pool2d(h, 2)
         print(h.size())
 
