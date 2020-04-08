@@ -47,7 +47,7 @@ class ImageDataset(torch.utils.data.Dataset):
                 height = None
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
-                     U.padding(4),
+                     #U.padding(4),
                      U.random_crop(width, height),
                      ]
         else:
@@ -57,7 +57,6 @@ class ImageDataset(torch.utils.data.Dataset):
 
     def preprocess(self, image):
         for f in self.preprocess_funcs:
-            print(image.shape)
             image = f(image)
 
         return image
