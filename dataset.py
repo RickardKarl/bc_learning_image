@@ -20,7 +20,7 @@ class ImageDataset(torch.utils.data.Dataset):
             else:
                 self.mean = np.array([125.3, 123.0, 113.9])
                 self.std = np.array([63.0, 62.1, 66.7])
-        elif opt.dataset == 'cifar100'
+        elif opt.dataset == 'cifar100':
             if opt.plus:
                 self.mean = np.array([7.37, 2.13, -9.50])
                 self.std = np.array([57.6, 54.0, 58.5])
