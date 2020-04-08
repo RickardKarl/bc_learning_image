@@ -20,13 +20,20 @@ class ImageDataset(torch.utils.data.Dataset):
             else:
                 self.mean = np.array([125.3, 123.0, 113.9])
                 self.std = np.array([63.0, 62.1, 66.7])
-        else:
+        elif opt.dataset == 'cifar100'
             if opt.plus:
                 self.mean = np.array([7.37, 2.13, -9.50])
                 self.std = np.array([57.6, 54.0, 58.5])
             else:
                 self.mean = np.array([129.3, 124.1, 112.4])
                 self.std = np.array([68.2, 65.4, 70.4])
+        else:
+            if opt.plus:
+                self.mean = np.array([0, 0, 0])
+                self.std = np.array([1, 1, 1])
+            else:
+                self.mean = np.array([139.36307497 129.59948285 133.09479106])
+                self.std = np.array([83.75314532 78.329098   82.05150934])
 
         self.preprocess_funcs = self.preprocess_setup()
 
@@ -40,7 +47,7 @@ class ImageDataset(torch.utils.data.Dataset):
             normalize = U.normalize
         if self.train and self.opt.noDataAug != True:
             if self.opt.dataset == 'caltech101':
-                size = 180
+                size = 224
             else:
                 size = 32
             funcs = [normalize(self.mean, self.std),
