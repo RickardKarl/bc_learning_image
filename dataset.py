@@ -32,8 +32,8 @@ class ImageDataset(torch.utils.data.Dataset):
                 self.mean = np.array([0, 0, 0])
                 self.std = np.array([1, 1, 1])
             else:
-                self.mean = np.array([139.36307497 129.59948285 133.09479106])
-                self.std = np.array([83.75314532 78.329098   82.05150934])
+                self.mean = np.array([139.36307497, 129.59948285, 133.09479106])
+                self.std = np.array([83.75314532, 78.329098,   82.05150934])
 
         self.preprocess_funcs = self.preprocess_setup()
 
