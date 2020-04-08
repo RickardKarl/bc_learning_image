@@ -25,8 +25,8 @@ class ConvNet(nn.Module):
         self.conv51 = ConvBNReLU(512, 512, 5, pad=1)
         self.conv52 = ConvBNReLU(512, 512, 3, pad=1)
         self.conv53 = ConvBNReLU(512, 512, 3, pad=1)
-        self.conv54 = ConvBNReLU(512, 512, 3, pad=1)
-        self.fc4 = nn.Linear(4096, 1024)
+        self.conv54 = ConvBNReLU(512, 128, 3, pad=1)
+        self.fc4 = nn.Linear(3200, 1024)
         self.fc5 = nn.Linear(1024, 1024)
         self.fc6 = nn.Linear(1024, n_classes)
 
