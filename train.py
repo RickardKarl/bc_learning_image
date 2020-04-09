@@ -32,11 +32,11 @@ class Trainer:
 
         # Initialize learning rate schedule
         if optimizer != None:
-            if self.opt.netType != 'vgg19':
-                epoch_milestones = np.array([int(self.opt.nEpochs * i) for i in self.opt.schedule]) 
-                self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, epoch_milestones, gamma=0.1)
-            else:  
-                self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, 200, gamma=0.95)
+            #if self.opt.netType != 'vgg19':
+            epoch_milestones = np.array([int(self.opt.nEpochs * i) for i in self.opt.schedule]) 
+            self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, epoch_milestones, gamma=0.1)
+            #else:  
+            #    self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, 200, gamma=0.95)
 
     def train(self, epoch):
         """
