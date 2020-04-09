@@ -4,13 +4,14 @@ import sys
 import _pickle as cPickle
 from PIL import Image
 import numpy as np
+import matplotlib.pyplot as plt
 
 # TODO: Save learning loss
 
 train_size = 0.8
-excluded_labels = ['Faces', 'BACKGROUND_Google'] # there exists Faces_easy which we only use for now
-basewidth = 240
-hsize = 180
+excluded_labels = ['BACKGROUND_Google'] # there exists Faces_easy which we only use for now
+basewidth = 224
+hsize = 224
 
 if __name__ == "__main__":
     folder = sys.argv[1]
@@ -69,9 +70,19 @@ if __name__ == "__main__":
             images_test.append(arr)
             labels_test.append(label_to_int.get(l))
 
+    plt.imshow(images_train[1000])
+    print(labels_train[1000])
+    print(label_to_int)
+    plt.show()
+
     # Concatenate list of arrays into single array
     images_train = np.array(images_train).reshape((-1, 3,basewidth, hsize))
     images_test = np.array(images_test).reshape((-1, 3, basewidth, hsize))
+
+    #print("Mean RGB of images:")
+    #print(train_size*np.mean(images_train, axis=(0, 2, 3)) + (1-train_size)*np.mean(images_test, axis=(0, 2, 3)))
+    #print("Std RGB of images:")
+    #print(np.std(images_test, axis=(0, 2, 3)))
 
     # Save in dict
     dataset_dict_train = {}

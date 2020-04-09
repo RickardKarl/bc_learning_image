@@ -7,6 +7,7 @@ import sys
 import os
 from datetime import datetime
 import torch
+import matplotlib.pyplot as plt 
 
 import opts
 import models
@@ -20,8 +21,13 @@ def main():
         torch.cuda.set_device(opt.gpu)
     for i in range(1, opt.nTrials + 1):
         print('+-- Trial {} --+'.format(i))
-        best_val_error = train(opt, i)
+        best_val_error, t_error, val_error = train(opt, i)
         print("Best validation rate: {}".format(best_val_error))
+
+        plt.(list(range(opt.nEpochs)), t_error, label="Training error")
+        plt.(list(range(opt.nEpochs)), val_error, label="Validation error")
+        plt.legend()
+        plt.show()
 
 
 def train(opt, trial):
@@ -42,10 +48,14 @@ def train(opt, trial):
 
     # Keep track of best validation error rate
     best_val_error = 100.0
+    # Keep track of errors over time
+    val_error = []
+    training_error = []
 
     model = getattr(models, opt.netType)(opt.nClasses)
     if opt.noGPU == False:
         model.cuda()
+
     # TODO: there is no direct method in PyTorch with NesterovAG
     optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
                                 weight_decay=opt.weightDecay, nesterov=True)
@@ -69,7 +79,11 @@ def train(opt, trial):
                 print("New best validation error rate: {} (Saved checkpoint)".format(best_val_error))
                 torch.save(model.state_dict(), os.path.join(opt.save, filename))
         
-    return best_val_error
+        val_error.append(val_top1)
+        training_error.append(train_top1)
+
+
+    return best_val_error, training_error, val_error
 
 
 
