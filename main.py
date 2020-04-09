@@ -58,7 +58,7 @@ def train(opt, trial):
 
     # TODO: there is no direct method in PyTorch with NesterovAG
     if opt.netType == 'vgg19':
-        optimizer = torch.optim.adam(params=model.parameters(), lr=opt.LR, weight_decay=opt.weightDecay)
+        optimizer = torch.optim.Adam(params=model.parameters(), lr=opt.LR, weight_decay=opt.weightDecay)
     else:
         optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
                                 weight_decay=opt.weightDecay, nesterov=True)
