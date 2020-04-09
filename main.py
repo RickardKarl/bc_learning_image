@@ -24,8 +24,8 @@ def main():
         best_val_error, t_error, val_error = train(opt, i)
         print("Best validation rate: {}".format(best_val_error))
 
-        plt.(list(range(opt.nEpochs)), t_error, label="Training error")
-        plt.(list(range(opt.nEpochs)), val_error, label="Validation error")
+        plt.plot(list(range(opt.nEpochs)), t_error, label="Training error")
+        plt.plot(list(range(opt.nEpochs)), val_error, label="Validation error")
         plt.legend()
         plt.show()
 
@@ -57,7 +57,7 @@ def train(opt, trial):
         model.cuda()
 
     # TODO: there is no direct method in PyTorch with NesterovAG
-    if opt.dataset == 'caltech101':
+    if opt.netType == 'vgg19':
         optimizer = torch.optim.adam(params=model.parameters(), lr=opt.LR, weight_decay=opt.weightDecay)
     else:
         optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
