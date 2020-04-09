@@ -57,7 +57,10 @@ def train(opt, trial):
         model.cuda()
 
     # TODO: there is no direct method in PyTorch with NesterovAG
-    optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
+    if opt.dataset == 'caltech101':
+        optimizer = torch.optim.adam(params=model.parameters(), lr=opt.LR, weight_decay=opt.weightDecay)
+    else:
+        optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
                                 weight_decay=opt.weightDecay, nesterov=True)
 
     train_iter, val_iter = dataset.setup(opt)
