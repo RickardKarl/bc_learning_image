@@ -36,7 +36,7 @@ class Trainer:
                 epoch_milestones = np.array([int(self.opt.nEpochs * i) for i in self.opt.schedule]) 
                 self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, epoch_milestones, gamma=0.1)
             else:  
-                self.scheduler = torch.optim.StepLR(self.optimizer, 30, gamma=1e-6)
+                self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, 30, gamma=1e-6)
 
     def train(self, epoch):
         """
