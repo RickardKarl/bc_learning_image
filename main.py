@@ -27,6 +27,7 @@ def main():
         plt.plot(list(range(opt.nEpochs)), t_error, label="Training error")
         plt.plot(list(range(opt.nEpochs)), val_error, label="Validation error")
         plt.legend()
+        plt.show()
 
 
 def train(opt, trial):
