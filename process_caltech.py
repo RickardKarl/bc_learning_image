@@ -51,11 +51,12 @@ if __name__ == "__main__":
     print("Sorting all images...")
     for l, image_paths in label_to_image.items():
 
-        if l in oversampled_images:
-            total_training_samples = 120
-        else:
-            total_training_samples = len(image_paths)
+        #if l in oversampled_images:
+        #    total_training_samples = 120
+        #else:
+        #    total_training_samples = len(image_paths)
         
+        total_training_samples = len(image_paths)
         nbr_training_samples = int(0.8*total_training_samples)
         
         # Training data
