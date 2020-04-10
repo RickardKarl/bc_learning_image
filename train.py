@@ -64,8 +64,6 @@ class Trainer:
                 loss = F.cross_entropy(y, t)
                 acc = accuracy(y.data, t)
 
-            
-            import matplotlib.pyplot as plt
             print(t)
 
             loss.backward()
