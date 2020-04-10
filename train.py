@@ -101,7 +101,10 @@ class Trainer:
 
             import matplotlib.pyplot as plt
             plt.imshow(self.model.(x)[0].tonumpy())
+            plt.show()
             print(t[0])
+            sys.exit()
+
 
             acc = accuracy(y.data, t)
             val_acc += float(acc.item()) * len(t.data)
