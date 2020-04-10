@@ -61,7 +61,7 @@ class ImageDataset(torch.utils.data.Dataset):
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
                 image2, label2 = self.base[random.randint(0, len(self.base) - 1)]
                 if label1 != label2:
-                    break
+                    break 
             image1 = self.preprocess(image1)
             image2 = self.preprocess(image2)
 
@@ -83,7 +83,6 @@ class ImageDataset(torch.utils.data.Dataset):
             image, label = self.base[i]
             image = self.preprocess(image).astype(np.float32)
             label = np.array(label, dtype=np.int32)
-            print(image[0])
             #print(image.shape)
 
         return image, label
