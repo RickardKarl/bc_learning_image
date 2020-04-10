@@ -63,7 +63,7 @@ def train(opt, trial):
         optimizer = torch.optim.SGD(params=model.parameters(), lr=opt.LR, momentum=opt.momentum,
                                 weight_decay=opt.weightDecay, nesterov=True)
 
-    train_iter, val_iter, class_weights = dataset.setup(opt)
+    train_iter, val_iter, class_weight = dataset.setup(opt)
     trainer = Trainer(model, optimizer, train_iter, val_iter, opt, class_weight)
 
     for epoch in range(1, opt.nEpochs + 1):
