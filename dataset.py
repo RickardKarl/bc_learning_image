@@ -97,6 +97,7 @@ class ImageDataset(torch.utils.data.Dataset):
             image = self.preprocess(image).astype(np.float32)
             label = np.array(label, dtype=np.int32)
 
+        print(image)
         return image, label
 
 
