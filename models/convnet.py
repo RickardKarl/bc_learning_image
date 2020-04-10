@@ -50,32 +50,32 @@ class VGG19(nn.Module):
     def __init__(self, n_classes):
         super(VGG19, self).__init__()
         # Block 1
-        self.conv11 = ConvBNReLU(3, 64, 3, pad=1)
-        self.conv12 = ConvBNReLU(64, 128, 3, pad=1)
+        self.conv11 = ConvBNReLU(3, 64, 3, pad=0)
+        self.conv12 = ConvBNReLU(64, 128, 3, pad=0)
 
         # Block 2
-        self.conv21 = ConvBNReLU(128, 128, 3, pad=1)
-        self.conv22 = ConvBNReLU(128, 256, 3, pad=1)
+        self.conv21 = ConvBNReLU(128, 128, 3, pad=0)
+        self.conv22 = ConvBNReLU(128, 256, 3, pad=0)
 
         # Block 3
-        self.conv31 = ConvBNReLU(256, 256, 3, pad=1)
-        self.conv32 = ConvBNReLU(256, 256, 3, pad=1)
-        self.conv33 = ConvBNReLU(256, 256, 3, pad=1)
-        self.conv34 = ConvBNReLU(256, 512, 3, pad=1)
+        self.conv31 = ConvBNReLU(256, 256, 3, pad=0)
+        self.conv32 = ConvBNReLU(256, 256, 3, pad=0)
+        self.conv33 = ConvBNReLU(256, 256, 3, pad=0)
+        self.conv34 = ConvBNReLU(256, 512, 3, pad=0)
 
         # Block 4
-        self.conv41 = ConvBNReLU(512, 512, 3, pad=1)
-        self.conv42 = ConvBNReLU(512, 512, 3, pad=1)
-        self.conv43 = ConvBNReLU(512, 512, 3, pad=1)
-        self.conv44 = ConvBNReLU(512, 512, 3, pad=1)
+        self.conv41 = ConvBNReLU(512, 512, 3, pad=0)
+        self.conv42 = ConvBNReLU(512, 512, 3, pad=0)
+        self.conv43 = ConvBNReLU(512, 512, 3, pad=0)
+        self.conv44 = ConvBNReLU(512, 512, 3, pad=0)
 
         # Block 5
-        self.conv51 = ConvBNReLU(512, 512, 3, pad=1)
-        self.conv52 = ConvBNReLU(512, 512, 3, pad=1)
-        self.conv53 = ConvBNReLU(512, 512, 3, pad=1)
-        self.conv54 = ConvBNReLU(512, 128, 3, pad=1)
+        self.conv51 = ConvBNReLU(512, 512, 3, pad=0)
+        self.conv52 = ConvBNReLU(512, 512, 3, pad=0)
+        self.conv53 = ConvBNReLU(512, 512, 3, pad=0)
+        self.conv54 = ConvBNReLU(512, 128, 3, pad=0)
 
-        self.fc4 = nn.Linear(6272, 1024)
+        self.fc4 = nn.Linear(1024*4, 1024)
         self.fc5 = nn.Linear(1024, 1024)
         self.fc6 = nn.Linear(1024, n_classes)
 
