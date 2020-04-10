@@ -51,20 +51,20 @@ class VGG19(nn.Module):
         super(VGG19, self).__init__()
         # Block 1
         self.conv11 = ConvBNReLU(3, 64, 3, pad=0)
-        self.conv12 = ConvBNReLU(64, 128, 3, pad=0)
+        self.conv12 = ConvBNReLU(64, 64, 3, pad=0)
 
         # Block 2
-        self.conv21 = ConvBNReLU(128, 128, 3, pad=0)
-        self.conv22 = ConvBNReLU(128, 256, 3, pad=0)
+        self.conv21 = ConvBNReLU(64, 128, 3, pad=0)
+        self.conv22 = ConvBNReLU(128, 128, 3, pad=0)
 
         # Block 3
-        self.conv31 = ConvBNReLU(256, 256, 3, pad=0)
+        self.conv31 = ConvBNReLU(128, 256, 3, pad=0)
         self.conv32 = ConvBNReLU(256, 256, 3, pad=0)
         self.conv33 = ConvBNReLU(256, 256, 3, pad=0)
-        self.conv34 = ConvBNReLU(256, 512, 3, pad=0)
+        self.conv34 = ConvBNReLU(256, 256, 3, pad=0)
 
         # Block 4
-        self.conv41 = ConvBNReLU(512, 512, 3, pad=0)
+        self.conv41 = ConvBNReLU(256, 512, 3, pad=0)
         self.conv42 = ConvBNReLU(512, 512, 3, pad=0)
         self.conv43 = ConvBNReLU(512, 512, 3, pad=0)
         self.conv44 = ConvBNReLU(512, 512, 3, pad=0)
