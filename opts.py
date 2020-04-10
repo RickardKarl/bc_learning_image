@@ -27,6 +27,7 @@ def parse():
     
     # Experiment / ablation analysis parameters
     parser.add_argument('--noDataAug', action='store_true', help='Disable data augmentation')
+    parser.add_argument('--whereToMix', type=int, default=0)
 
 
     opt = parser.parse_args()
@@ -86,4 +87,5 @@ def display_info(opt):
     print('| warmup   : {}'.format(opt.warmup))
     print('| batchSize: {}'.format(opt.batchSize))
     print('| Data Augmentation: {}'.format("No" if opt.noDataAug else "Yes"))
+    print('| Where to mix: {}'.format(opt.whereToMix))
     print('+------------------------------+')
