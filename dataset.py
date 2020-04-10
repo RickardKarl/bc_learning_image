@@ -53,7 +53,7 @@ class ImageDataset(torch.utils.data.Dataset):
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
                      U.padding(4),
-                     U.random_crop(size),
+                     #U.random_crop(size),
                      ]
 
             
