@@ -61,7 +61,20 @@ class ImageDataset(torch.utils.data.Dataset):
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
                 image2, label2 = self.base[random.randint(0, len(self.base) - 1)]
                 if label1 != label2:
-                    break 
+                    break
+
+            if self.opt.whereToMix > 0:
+                image1 = self.preprocess(image1).astype(np.float32)
+                image2 = self.preprocess(image2).astype(np.float32)
+
+                label1 = np.array(label1, dtype=np.int32)
+                label2 = np.array(label2, dtype=np.int32)
+
+                imagePair = np.array([image1, image2])
+                labelPair = np.array([label1, label2])
+
+                return imagePair, labelPair
+
             image1 = self.preprocess(image1)
             image2 = self.preprocess(image2)
 
