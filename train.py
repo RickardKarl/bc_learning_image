@@ -65,6 +65,7 @@ class Trainer:
                 acc = accuracy(y.data, t)
 
             print(t)
+            print(y)
 
             loss.backward()
             self.optimizer.step()
