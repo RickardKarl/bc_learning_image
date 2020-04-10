@@ -47,7 +47,7 @@ class Trainer:
             self.optimizer.zero_grad()
 
             x = x_array.to(device)
-            print(t_array)
+            #print(t_array)
             if self.opt.whereToMix > 0:
                 y, t = self.model(np.array([x, t_array]))
             else:
