@@ -26,7 +26,12 @@ class ConvNet(nn.Module):
 
     def forward(self, x):
 
-        print(type(x))
+        if type(x) == numpy.ndarray:
+            print(type(x))
+            labels = x[1]
+            x = x[0]
+            print(type(x))
+        
         h = self.conv11(x)
         h = self.conv12(h)
         h = F.max_pool2d(h, 2)
