@@ -20,7 +20,7 @@ def accuracy(y, t):
 
 
 class Trainer:
-    def __init__(self, model, optimizer, train_iter, val_iter, opt):
+    def __init__(self, model, optimizer, train_iter, val_iter, opt, class_weight):
         self.model = model
         self.optimizer = optimizer
         self.train_iter = train_iter
@@ -29,6 +29,7 @@ class Trainer:
         # self.n_batches = len(train_iter)
         self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
         self.start_time = time.time()
+        self.class_weight
 
         # Initialize learning rate schedule
         if optimizer != None:
@@ -61,7 +62,8 @@ class Trainer:
             else:
                 """ F.cross_entropy already combines log_softmax and NLLLoss """
                 t = t.to(device, dtype=torch.int64)
-                loss = F.cross_entropy(y, t)
+                print(self.class_weight)
+                loss = F.cross_entropy(y, t, weight=self.class_weight.to(device, dtype=torch.float32))
                 acc = accuracy(y.data, t)
 
             print(t)

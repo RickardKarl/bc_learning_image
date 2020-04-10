@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 train_size = 0.8
 excluded_labels = ['BACKGROUND_Google'] # there exists Faces_easy which we only use for now
-oversampled_images = ['motorbikes', 'Faces_easy', 'Faces', 'airplanes']
+oversampled_images = ['Motorbikes', 'Faces_easy', 'Faces', 'airplanes','Leopards', 'watch']
 basewidth = 224
 hsize = 224
 
@@ -37,7 +37,9 @@ if __name__ == "__main__":
     index = 0
     for k in label_to_image.keys():
         label_to_int[k] = index
+        #print(k, index, len(label_to_image.get(k)))
         index += 1
+       
 
     # Save all data in the following dict
     images_train = []
@@ -50,7 +52,7 @@ if __name__ == "__main__":
     for l, image_paths in label_to_image.items():
 
         if l in oversampled_images:
-            total_training_samples = 300
+            total_training_samples = 120
         else:
             total_training_samples = len(image_paths)
         
