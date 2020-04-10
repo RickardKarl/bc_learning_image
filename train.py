@@ -64,9 +64,9 @@ class Trainer:
                 loss = F.cross_entropy(y, t)
                 acc = accuracy(y.data, t)
 
-            print(t)
-            print("y: /n")
-            print(y.argmax(axis=1).reshape(t.shape))
+            #print(t)
+            #print("y: /n")
+            #print(y.argmax(axis=1).reshape(t.shape))
 
             loss.backward()
             self.optimizer.step()
