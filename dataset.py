@@ -97,7 +97,7 @@ class ImageDataset(torch.utils.data.Dataset):
             image = self.preprocess(image).astype(np.float32)
             label = np.array(label, dtype=np.int32)
 
-        print(image)
+        print(image, label, np.max(image))
         return image, label
 
 
