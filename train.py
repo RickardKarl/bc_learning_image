@@ -66,11 +66,8 @@ class Trainer:
 
             
             import matplotlib.pyplot as plt
-            print(t[0])
-            plt.imshow(x[0].tonumpy())
-            plt.show()
-            sys.exit()
-            
+            print(t)
+
             loss.backward()
             self.optimizer.step()
 
