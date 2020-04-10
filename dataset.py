@@ -51,8 +51,8 @@ class ImageDataset(torch.utils.data.Dataset):
             else:
                 size = 32
             funcs = [normalize(self.mean, self.std),
-                     U.horizontal_flip(),
-                     U.padding(4),
+                     #U.horizontal_flip(),
+                     #U.padding(4),
                      #U.random_crop(size),
                      ]
 
@@ -97,9 +97,9 @@ class ImageDataset(torch.utils.data.Dataset):
             image = self.preprocess(image).astype(np.float32)
             label = np.array(label, dtype=np.int32)
 
-        import matplotlib.pyplot as plt 
-        plt.imshow(image.reshape(224,224,3))
-        plt.show()
+        #import matplotlib.pyplot as plt 
+        #plt.imshow(image.reshape(224,224,3))
+        #plt.show()
         return image, label
 
 
@@ -123,6 +123,12 @@ def setup(opt):
         val = unpickle(os.path.join(opt.data, 'test'))
         val_images = val['data']
         val_labels = val['labels']
+
+        for i in range(100):
+            import matplotlib.pyplot as plt 
+            plt.imshow(train_images[i].reshape(224,224,3))
+            plt.show()
+
     else:
         train = unpickle(os.path.join(opt.data, 'train'))
         train_images = train['data'].reshape(-1, 3, 32, 32)
