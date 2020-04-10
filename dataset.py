@@ -123,7 +123,7 @@ def setup(opt):
         val = unpickle(os.path.join(opt.data, 'test'))
         val_images = val['data']
         val_labels = val['labels']
-
+        print(train_images)
         for i in range(100):
             import matplotlib.pyplot as plt 
             plt.imshow(train_images[i].reshape(224,224,3))
