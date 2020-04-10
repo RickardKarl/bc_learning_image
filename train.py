@@ -46,9 +46,9 @@ class Trainer:
             device = torch.device("cuda" if cuda.is_available() else "cpu")
             self.optimizer.zero_grad()
 
-            #print(x_array.size())
             x = x_array.to(device)
             t = t_array.to(device)
+            print(x.size())
             y = self.model(x)
 
             if self.opt.BC:
