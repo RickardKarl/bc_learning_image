@@ -29,7 +29,7 @@ class Trainer:
         # self.n_batches = len(train_iter)
         self.n_batches = (len(train_iter.dataset) - 1) // opt.batchSize + 1
         self.start_time = time.time()
-        self.class_weight
+        self.class_weight = class_weight
 
         # Initialize learning rate schedule
         if optimizer != None:
