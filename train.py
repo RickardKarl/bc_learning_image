@@ -47,9 +47,13 @@ class Trainer:
             self.optimizer.zero_grad()
 
             x = x_array.to(device)
+            print(t_array)
+            if self.opt.whereToMix > 0:
+                y, t = self.model(np.array([x, t_array]))
+            else:
+                y = self.model(x)
+            
             t = t_array.to(device)
-            print(x.size())
-            y = self.model(x)
 
             if self.opt.BC:
                 t = t.to(device, dtype=torch.float32)
