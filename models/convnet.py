@@ -25,7 +25,8 @@ class ConvNet(nn.Module):
         self.train = True
 
     def forward(self, x):
-        print(x.dim())
+
+        print(type(x))
         h = self.conv11(x)
         h = self.conv12(h)
         h = F.max_pool2d(h, 2)
