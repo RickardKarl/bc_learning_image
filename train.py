@@ -65,6 +65,12 @@ class Trainer:
                 acc = accuracy(y.data, t)
 
             
+            import matplotlib.pyplot as plt
+            print(t[0])
+            plt.imshow(x[0].tonumpy())
+            plt.show()
+            sys.exit()
+            
             loss.backward()
             self.optimizer.step()
 
@@ -98,13 +104,6 @@ class Trainer:
                 t = t_array.to(device, dtype=torch.int64)
                 # TODO: figure out why to use softmax here since it also works fine without softmax
                 y = F.softmax(self.model(x), dim=1)
-
-            import matplotlib.pyplot as plt
-            plt.imshow(self.model.(x)[0].tonumpy())
-            plt.show()
-            print(t[0])
-            sys.exit()
-
 
             acc = accuracy(y.data, t)
             val_acc += float(acc.item()) * len(t.data)
