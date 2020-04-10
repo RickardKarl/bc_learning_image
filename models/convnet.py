@@ -1,6 +1,7 @@
 # define the 11-layer convnet architecture
 
 import math
+import numpy
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
