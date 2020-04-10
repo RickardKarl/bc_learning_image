@@ -99,7 +99,9 @@ if __name__ == "__main__":
     #print("Per-image std RGB of images:")
     #print(np.std(images_test, axis=(0,1,2,3)))
 
-
+    for i in range(0,110):
+        plt.imshow(images_train[i].reshape(224,224,3))
+        plt.show()
     print("Saving data...")
     # Save in dict
     dataset_dict_train = {}
