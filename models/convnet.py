@@ -97,7 +97,7 @@ class ConvNet(nn.Module):
         #images2 = images2.numpy()
         #labels = labels.numpy()
 
-        mixedImages = torch.zeros([128, 3, 32, 32])
+        mixedImages = torch.zeros([128, 64, 16, 16])
         mixedLabels = torch.zeros([128, 10])
 
         for i in range(batchSize):
