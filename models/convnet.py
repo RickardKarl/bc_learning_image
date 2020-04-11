@@ -35,23 +35,26 @@ class ConvNet(nn.Module):
 
             Mix = True
 
+            # Split imput list
             labels = x[1]
-            x = x[0]
+            images = x[0]
 
-            batchSize = x.size()[0]
+            batchSize = images.size()[0]
 
             device = torch.device("cuda" if cuda.is_available() else "cpu")
 
             images1 = torch.zeros([batchSize, 3, 32, 32])
             images2 = torch.zeros([batchSize, 3, 32, 32])
 
+            # Split image batches for parallel training
             for i in range(batchSize):
-                images1[i] = x[i][0]
-                images2[i] = x[i][1]
+                images1[i] = images[i][0]
+                images2[i] = images[i][1]
             
             images1 = images1.to(device)
             images2 = images2.to(device)
 
+            # Parallel training
             h1 = self.conv11(images1)
             h2 = self.conv11(images2)
 
@@ -60,8 +63,8 @@ class ConvNet(nn.Module):
 
             h1 = F.max_pool2d(h1, 2)
             h2 = F.max_pool2d(h2, 2)
-            #print(h1.size())
-
+            
+            # Mix images and labels
             h, mixedLabels = self.mix(h1, h2, labels)
             h = h.to(device)
             mixedLabels = mixedLabels.to(device)
@@ -94,10 +97,6 @@ class ConvNet(nn.Module):
     def mix(self, images1, images2, labels):
 
         batchSize = images1.size()[0]
-
-        #images1 = images1.numpy()
-        #images2 = images2.numpy()
-        #labels = labels.numpy()
 
         mixedImages = torch.zeros([batchSize, 64, 16, 16])
         mixedLabels = torch.zeros([batchSize, 10])
