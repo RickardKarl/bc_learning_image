@@ -28,7 +28,12 @@ class ConvNet(nn.Module):
 
     def forward(self, x):
 
+        Mix = False
+        
         if type(x) == list:
+
+            Mix = True
+
             labels = x[1]
             x = x[0]
 
@@ -45,10 +50,22 @@ class ConvNet(nn.Module):
             
             images1 = images1.to(device)
             images2 = images2.to(device)
-        
-        h = self.conv11(x)
-        h = self.conv12(h)
-        h = F.max_pool2d(h, 2)
+
+            h1 = self.conv11(images1)
+            h2 = self.conv11(images2)
+
+            h1 = self.conv12(h1)
+            h2 = self.conv12(h2)
+
+            h1 = F.max_pool2d(h1, 2)
+            h2 = F.max_pool2d(h2, 2)
+
+            h, mixedLabels = mix(h1, h2, labels)
+
+        else:     
+            h = self.conv11(x)
+            h = self.conv12(h)
+            h = F.max_pool2d(h, 2)
 
         h = self.conv21(h)
         h = self.conv22(h)
@@ -65,7 +82,10 @@ class ConvNet(nn.Module):
         h = F.dropout(F.relu(self.fc4(h)), training=self.train)
         h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
-        return self.fc6(h)
+        if Mix:
+            return self.fc6(h), mixedLabels
+        else:
+            return self.fc6(h)
     
     def mix(self, images1, images2, labels):
 
