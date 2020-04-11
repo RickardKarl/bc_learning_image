@@ -52,10 +52,9 @@ class Trainer:
                 y, t = self.model([x, t_array])
             else:
                 y = self.model(x)
-            
-            t = t_array.to(device)
+                t = t_array.to(device)
 
-            if not self.opt.BC: # Temporary not, to be removed
+            if self.opt.BC:
                 t = t.to(device, dtype=torch.float32)
                 y = y.to(device, dtype=torch.float32)
                 loss = utils.kl_divergence(y, t)
