@@ -105,7 +105,7 @@ class ConvNet(nn.Module):
             mixedImages[i] = (images1[i] * r + images2[i] * (1 - r))
 
             # Mix two labels
-            eye = np.eye(10) # Hard coded for 10 classes
+            eye = torch.tensor(numpy.eye(10)) # Hard coded for 10 classes
             mixedLabels[i] = (eye[labels[i][0]] * r + eye[labels[i][1]] * (1 - r))
 
         return mixedImages, mixedLabels
