@@ -67,4 +67,4 @@ class ConvNet(nn.Module):
         h = F.dropout(F.relu(self.fc4(h)), training=self.train)
         h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
-        return self.fc6(h)
+        return self.fc6(h), labels
