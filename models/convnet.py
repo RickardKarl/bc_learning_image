@@ -1,7 +1,7 @@
 # define the 11-layer convnet architecture
 
 import math
-import numpy
+import random
 import torch
 from torch import cuda
 import torch.nn as nn
@@ -37,7 +37,7 @@ class ConvNet(nn.Module):
             images1 = torch.zeros([128, 3, 32, 32])
             images2 = torch.zeros([128, 3, 32, 32])
 
-            batchSize = 128 # I'm not sure how to import opt, so this is hard coded
+            batchSize = 128 # I'm not sure how to import opt, so this is currently hard coded
 
             for i in range(batchSize):
                 images1[i] = x[i][0]
@@ -46,7 +46,7 @@ class ConvNet(nn.Module):
             images1 = images1.to(device)
             images2 = images2.to(device)
         
-        h = self.conv11(images1)
+        h = self.conv11(x)
         h = self.conv12(h)
         h = F.max_pool2d(h, 2)
 
@@ -66,3 +66,25 @@ class ConvNet(nn.Module):
         h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
         return self.fc6(h), labels
+    
+    def mix(self, images1, images2, labels):
+
+        batchSize = 128 # I'm not sure how to import opt, so this is currently hard coded
+
+        images1 = images1.numpy()
+        images2 = images2.numpy()
+        labels = labels.numpy()
+
+        mixedImages = torch.zeros([128, 3, 32, 32])
+        mixedLabels = torch.zeros([128, 3, 32, 32])
+
+        for i in range(batchSize):
+            r = np.array(random.random())
+            mixedImages[i] = (images1[i] * r + images2[i] * (1 - r)).astype(np.float32)
+
+            # Mix two labels
+            eye = np.eye(10) # Hard coded for 10 classes
+            label = (eye[label1] * r + eye[label2] * (1 - r)).astype(np.float32)
+
+
+        return mixedImages, mixedLabels
