@@ -2,6 +2,7 @@
 
 import math
 import random
+import numpy
 import torch
 from torch import cuda
 import torch.nn as nn
@@ -99,7 +100,7 @@ class ConvNet(nn.Module):
         mixedLabels = torch.zeros([128, 10])
 
         for i in range(batchSize):
-            r = np.array(random.random())
+            r = torch.tensor(numpy.array(random.random()))
             mixedImages[i] = (images1[i] * r + images2[i] * (1 - r))
 
             # Mix two labels
