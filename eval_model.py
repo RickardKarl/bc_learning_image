@@ -16,7 +16,7 @@ def eval_parse():
 
     # General settings
     parser.add_argument('--checkpoint', required=True, help='Path to folder with models')
-    parser.add_argument('--dataset', required=True, choices=['cifar10', 'cifar100'])
+    parser.add_argument('--dataset', required=True, choices=['cifar10', 'cifar100', 'caltech101'])
     parser.add_argument('--data', required=True, help='Path to dataset')
 
 

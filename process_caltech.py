@@ -66,6 +66,7 @@ if __name__ == "__main__":
             image = Image.open(p).convert('RGB') # get RGB image
             image = image.resize((basewidth,hsize)) # rescale
             arr = np.asarray(image)
+            arr = np.flip(np.rot90(np.transpose(arr), k=-1, axes =(1,2)), axis=2) # reshape (3,224,224) - ndarray.reshape does not work correctly
             # Append to lists
             images_train.append(arr)
             labels_train.append(label_to_int.get(l))
@@ -77,31 +78,30 @@ if __name__ == "__main__":
             image = Image.open(p).convert('RGB') # get RGB image
             image = image.resize((basewidth,hsize)) # rescale
             arr = np.asarray(image)
+            arr = np.flip(np.rot90(np.transpose(arr), k=-1, axes =(1,2)), axis=2) # reshape (3,224,224) - ndarray.reshape does not work correctly
             # Append to lists
             images_test.append(arr)
             labels_test.append(label_to_int.get(l))
 
     print("Concatenating data...")
     # Concatenate list of arrays into single array
-    images_train = np.array(images_train).reshape((-1, 3,basewidth, hsize))
-    images_test = np.array(images_test).reshape((-1, 3, basewidth, hsize))
+    images_train = np.array(images_train)
+    images_test = np.array(images_test)
 
     print("Labels in test:")
     print(np.unique(labels_test, return_counts=True))
 
-    #print("Channel-wise mean RGB of images:")
-    #print(train_size*np.mean(images_train, axis=(0, 2, 3)) + (1-train_size)*np.mean(images_test, axis=(0, 2, 3)))
-    #print("Channel-wise std RGB of images:")
-    #print(np.std(images_test, axis=(0, 2, 3)))
+    print("Channel-wise mean RGB of images:")
+    print(train_size*np.mean(images_train, axis=(0, 2, 3)) + (1-train_size)*np.mean(images_test, axis=(0, 2, 3)))
+    print("Channel-wise std RGB of images:")
+    print(np.std(images_test, axis=(0, 2, 3)))
 
-    #print("Per-image mean RGB of images:")
-    #print(train_size*np.mean(images_train, axis=(0,1,2,3)) + (1-train_size)*np.mean(images_test, axis=(0,1,2,3)))
-    #print("Per-image std RGB of images:")
-    #print(np.std(images_test, axis=(0,1,2,3)))
+    print("Per-image mean RGB of images:")
+    print(train_size*np.mean(images_train, axis=(0,1,2,3)) + (1-train_size)*np.mean(images_test, axis=(0,1,2,3)))
+    print("Per-image std RGB of images:")
+    print(np.std(images_test, axis=(0,1,2,3)))
 
-    for i in range(0,110):
-        plt.imshow(images_train[i].reshape(224,224,3))
-        plt.show()
+
     print("Saving data...")
     # Save in dict
     dataset_dict_train = {}
