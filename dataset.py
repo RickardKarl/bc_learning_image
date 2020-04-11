@@ -130,7 +130,6 @@ def setup(opt):
         val_labels = val['fine_labels']
 
 
-    class_weights = np.max(np.unique(train_labels, return_counts=True)[1])/(np.unique(train_labels, return_counts=True)[1]) # Inverse of frequency of each class
 
     # Iterator setup
     train_data = ImageDataset(train_images, train_labels, opt, train=True)
@@ -138,4 +137,4 @@ def setup(opt):
     train_iter = torch.utils.data.DataLoader(train_data, batch_size=opt.batchSize, shuffle=True)
     val_iter = torch.utils.data.DataLoader(val_data, batch_size=opt.batchSize, shuffle=False)
 
-    return train_iter, val_iter, class_weights
+    return train_iter, val_iter
