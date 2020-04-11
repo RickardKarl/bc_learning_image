@@ -38,12 +38,12 @@ class ConvNet(nn.Module):
             labels = x[1]
             x = x[0]
 
+            batchSize = x.size()[0]
+
             device = torch.device("cuda" if cuda.is_available() else "cpu")
 
-            images1 = torch.zeros([128, 3, 32, 32])
-            images2 = torch.zeros([128, 3, 32, 32])
-
-            batchSize = 128 # I'm not sure how to import opt, so this is currently hard coded
+            images1 = torch.zeros([batchSize, 3, 32, 32])
+            images2 = torch.zeros([batchSize, 3, 32, 32])
 
             for i in range(batchSize):
                 images1[i] = x[i][0]
@@ -93,14 +93,14 @@ class ConvNet(nn.Module):
     
     def mix(self, images1, images2, labels):
 
-        batchSize = 128 # I'm not sure how to import opt, so this is currently hard coded
+        batchSize = images1.size()[0]
 
         #images1 = images1.numpy()
         #images2 = images2.numpy()
         #labels = labels.numpy()
 
-        mixedImages = torch.zeros([128, 64, 16, 16])
-        mixedLabels = torch.zeros([128, 10])
+        mixedImages = torch.zeros([batchSize, 64, 16, 16])
+        mixedLabels = torch.zeros([batchSize, 10])
 
         for i in range(batchSize):
             r = torch.tensor(numpy.array(random.random()))
