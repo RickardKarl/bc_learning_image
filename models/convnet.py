@@ -63,6 +63,8 @@ class ConvNet(nn.Module):
             print(h1.size())
 
             h, mixedLabels = self.mix(h1, h2, labels)
+            h = h.to(device)
+            mixedLabels = mixedLabels.to(device)
 
         else:     
             h = self.conv11(x)
