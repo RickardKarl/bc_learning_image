@@ -60,7 +60,7 @@ class ConvNet(nn.Module):
             h1 = F.max_pool2d(h1, 2)
             h2 = F.max_pool2d(h2, 2)
 
-            h, mixedLabels = mix(h1, h2, labels)
+            h, mixedLabels = self.mix(h1, h2, labels)
 
         else:     
             h = self.conv11(x)
