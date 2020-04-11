@@ -49,7 +49,7 @@ class Trainer:
             x = x_array.to(device)
             #print(t_array)
             if self.opt.whereToMix > 0:
-                y, t = self.model(np.array([x, t_array]))
+                y, t = self.model([x, t_array])
             else:
                 y = self.model(x)
             

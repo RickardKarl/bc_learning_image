@@ -3,6 +3,7 @@
 import math
 import numpy
 import torch
+from torch import cuda
 import torch.nn as nn
 import torch.nn.functional as F
 from models.convbnrelu import ConvBNReLU
@@ -27,13 +28,27 @@ class ConvNet(nn.Module):
 
     def forward(self, x):
 
-        if type(x) == numpy.ndarray:
+        if type(x) == list:
             print(type(x))
             labels = x[1]
             x = x[0]
             print(type(x))
+
+            device = torch.device("cuda" if cuda.is_available() else "cpu")
+
+            images1 = torch.zeros([128, 3, 32, 32])
+            images2 = torch.zeros([128, 3, 32, 32])
+
+            batchSize = 128
+
+            for i in range(batchSize):
+                images1[i] = x[i][0]
+                images2[i] = x[i][1]
+            
+            images1 = images1.to(device)
+            images2 = images2.to(device)
         
-        h = self.conv11(x)
+        h = self.conv11(images1)
         h = self.conv12(h)
         h = F.max_pool2d(h, 2)
 
