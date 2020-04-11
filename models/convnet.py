@@ -65,26 +65,25 @@ class ConvNet(nn.Module):
         h = F.dropout(F.relu(self.fc4(h)), training=self.train)
         h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
-        return self.fc6(h), labels
+        return self.fc6(h)
     
     def mix(self, images1, images2, labels):
 
         batchSize = 128 # I'm not sure how to import opt, so this is currently hard coded
 
-        images1 = images1.numpy()
-        images2 = images2.numpy()
-        labels = labels.numpy()
+        #images1 = images1.numpy()
+        #images2 = images2.numpy()
+        #labels = labels.numpy()
 
         mixedImages = torch.zeros([128, 3, 32, 32])
-        mixedLabels = torch.zeros([128, 3, 32, 32])
+        mixedLabels = torch.zeros([128, 10])
 
         for i in range(batchSize):
             r = np.array(random.random())
-            mixedImages[i] = (images1[i] * r + images2[i] * (1 - r)).astype(np.float32)
+            mixedImages[i] = (images1[i] * r + images2[i] * (1 - r))
 
             # Mix two labels
             eye = np.eye(10) # Hard coded for 10 classes
-            label = (eye[label1] * r + eye[label2] * (1 - r)).astype(np.float32)
-
+            mixedLabels[i] = (eye[labels[i][0]] * r + eye[labels[i][1]] * (1 - r))
 
         return mixedImages, mixedLabels
