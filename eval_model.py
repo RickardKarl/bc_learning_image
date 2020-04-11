@@ -32,8 +32,10 @@ def eval_parse():
     # Dataset details
     if opt.dataset == 'cifar10':
         opt.nClasses = 10
-    else:  # cifar100
+    elif opt.dataset  # cifar100:
         opt.nClasses = 100
+    else:
+        opt.nClasses = 101
 
     return opt
 
