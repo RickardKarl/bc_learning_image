@@ -29,17 +29,15 @@ class ConvNet(nn.Module):
     def forward(self, x):
 
         if type(x) == list:
-            print(type(x))
             labels = x[1]
             x = x[0]
-            print(type(x))
 
             device = torch.device("cuda" if cuda.is_available() else "cpu")
 
             images1 = torch.zeros([128, 3, 32, 32])
             images2 = torch.zeros([128, 3, 32, 32])
 
-            batchSize = 128
+            batchSize = 128 # I'm not sure how to import opt, so this is hard coded
 
             for i in range(batchSize):
                 images1[i] = x[i][0]
