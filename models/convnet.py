@@ -47,16 +47,16 @@ class ConvNet(nn.Module):
             images2 = torch.zeros([batchSize, 3, 32, 32])
 
             # Split image batches for parallel training
-            #for i in range(batchSize):
-            #    images1[i] = images[i][0]
-            #    images2[i] = images[i][1]
+            for i in range(batchSize):
+                images1[i] = images[i][0]
+                images2[i] = images[i][1]
             
             images1 = images1.to(device)
             images2 = images2.to(device)
 
             # Parallel training
-            h1 = self.conv11(images)
-            h2 = self.conv11(images)
+            h1 = self.conv11(images1)
+            h2 = self.conv11(images2)
 
             h1 = self.conv12(h1)
             h2 = self.conv12(h2)
