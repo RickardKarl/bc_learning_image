@@ -61,13 +61,13 @@ class ConvNet(nn.Module):
             h1 = self.conv12(h1)
             h2 = self.conv12(h2)
 
-            h = F.max_pool2d(h1, 2)
+            h1 = F.max_pool2d(h1, 2)
             h2 = F.max_pool2d(h2, 2)
             
             # Mix images and labels
-            #h, mixedLabels = self.mix(h1, h2, labels)
+            h, mixedLabels = self.mix(h1, h2, labels)
             h = h.to(device)
-            labels = labels.to(device)
+            mixedLabels = mixedLabels.to(device)
 
         else:     
             h = self.conv11(x)
@@ -90,7 +90,7 @@ class ConvNet(nn.Module):
         h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
         if Mix:
-            return self.fc6(h), labels
+            return self.fc6(h), mixedLabels
         else:
             return self.fc6(h)
     
