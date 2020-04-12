@@ -101,12 +101,14 @@ class ConvNet(nn.Module):
         mixedImages = torch.zeros([batchSize, 64, 16, 16])
         mixedLabels = torch.zeros([batchSize, 10])
 
+        r = torch.tensor(numpy.random.uniform(size=batchSize))
+
         for i in range(batchSize):
             r = torch.tensor(numpy.array(random.random()))
-            mixedImages[i] = (images1[i] * r + images2[i] * (1 - r))
+            #mixedImages[i] = (images1[i] * r + images2[i] * (1 - r))
 
             # Mix two labels
             eye = torch.tensor(numpy.eye(10)) # Hard coded for 10 classes
             mixedLabels[i] = (eye[labels[i][0]] * r + eye[labels[i][1]] * (1 - r))
 
-        return mixedImages, mixedLabels
+        return images1, mixedLabels
