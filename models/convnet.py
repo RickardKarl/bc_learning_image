@@ -56,16 +56,16 @@ class ConvNet(nn.Module):
 
             # Parallel training
             h1 = self.conv11(images1)
-            h2 = self.conv11(images2)
+            #h2 = self.conv11(images2)
 
             h1 = self.conv12(h1)
-            h2 = self.conv12(h2)
+            #h2 = self.conv12(h2)
 
             h1 = F.max_pool2d(h1, 2)
-            h2 = F.max_pool2d(h2, 2)
+            #h2 = F.max_pool2d(h2, 2)
             
             # Mix images and labels
-            h, mixedLabels = self.mix(h1, h2, labels)
+            h, mixedLabels = self.mix(h1, h1, labels)
             h = h.to(device)
             mixedLabels = mixedLabels.to(device)
 
