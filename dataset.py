@@ -73,7 +73,7 @@ class ImageDataset(torch.utils.data.Dataset):
                 imagePair = np.array([image1, image2])
                 labelPair = np.array([label1, label2])
 
-                return imagePair, labelPair
+                return imagePair, label1
 
             image1 = self.preprocess(image1)
             image2 = self.preprocess(image2)

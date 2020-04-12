@@ -61,11 +61,11 @@ class ConvNet(nn.Module):
             h1 = self.conv12(h1)
             h2 = self.conv12(h2)
 
-            h1 = F.max_pool2d(h1, 2)
+            h = F.max_pool2d(h1, 2)
             h2 = F.max_pool2d(h2, 2)
             
             # Mix images and labels
-            h, mixedLabels = self.mix(h1, h2, labels)
+            #h, mixedLabels = self.mix(h1, h2, labels)
             h = h.to(device)
             mixedLabels = mixedLabels.to(device)
 
