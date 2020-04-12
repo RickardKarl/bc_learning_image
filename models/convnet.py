@@ -96,6 +96,7 @@ class ConvNet(nn.Module):
     
     def mix(self, images1, images2, labels):
 
+        device = torch.device("cuda" if cuda.is_available() else "cpu")
         dim = images1.size()
         batchSize = dim[0]
 
@@ -104,7 +105,7 @@ class ConvNet(nn.Module):
 
         r = torch.tensor(numpy.random.uniform(size=batchSize))
 
-        r4dim = torch.zeros([batchSize, 1, 1, 1])
+        r4dim = torch.zeros([batchSize, 1, 1, 1]).to(device)
 
         for i in range(batchSize):
             r4dim[i][0][0][0] = r[i]
