@@ -29,38 +29,50 @@ class ConvNet(nn.Module):
 
     def forward(self, x):
 
-        # Split imput list
-        labels = x[1]
-        images = x[0]
-        whereToMix = x[2]
-
-        batchSize = images.size()[0]
-
-        device = torch.device("cuda" if cuda.is_available() else "cpu")
-
-        images1 = torch.zeros([batchSize, 3, 32, 32])
-        images2 = torch.zeros([batchSize, 3, 32, 32])
-
-        # Split image batches for parallel training
-        for i in range(batchSize):
-            images1[i] = images[i][0]
-            images2[i] = images[i][1]
+        Mix = False
         
-        images1 = images1.to(device)
-        images2 = images2.to(device)
+        if type(x) == list:
 
-        # Parallel training
-        h1 = self.conv11(images1)
-        h2 = self.conv11(images2)
+            Mix = True
 
-        h1 = self.conv12(h1)
-        h2 = self.conv12(h2)
+            # Split imput list
+            labels = x[1]
+            images = x[0]
 
-        h1 = F.max_pool2d(h1, 2)
-        h2 = F.max_pool2d(h2, 2)
+            batchSize = images.size()[0]
 
-        # Mix images and labels
-        h, mixedLabels = self.mix(h1, h2, labels)
+            device = torch.device("cuda" if cuda.is_available() else "cpu")
+
+            images1 = torch.zeros([batchSize, 3, 32, 32])
+            images2 = torch.zeros([batchSize, 3, 32, 32])
+
+            # Split image batches for parallel training
+            for i in range(batchSize):
+                images1[i] = images[i][0]
+                images2[i] = images[i][1]
+            
+            images1 = images1.to(device)
+            images2 = images2.to(device)
+
+            # Parallel training
+            h1 = self.conv11(images1)
+            h2 = self.conv11(images2)
+
+            h1 = self.conv12(h1)
+            h2 = self.conv12(h2)
+
+            h1 = F.max_pool2d(h1, 2)
+            h2 = F.max_pool2d(h2, 2)
+            
+            # Mix images and labels
+            h, mixedLabels = self.mix(h1, h2, labels)
+            h = h.to(device)
+            mixedLabels = mixedLabels.to(device)
+
+        else:     
+            h = self.conv11(x)
+            h = self.conv12(h)
+            h = F.max_pool2d(h, 2)
 
         h = self.conv21(h)
         h = self.conv22(h)
@@ -73,11 +85,14 @@ class ConvNet(nn.Module):
         h = F.max_pool2d(h, 2)
 
         h = h.view(h.size(0), -1)
-        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
 
+        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
         h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
-        return self.fc6(h), mixedLabels
+        if Mix:
+            return self.fc6(h), mixedLabels
+        else:
+            return self.fc6(h)
 
     
     def mix(self, images1, images2, labels):
