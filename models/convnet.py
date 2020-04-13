@@ -130,7 +130,7 @@ class ConvNet(nn.Module):
             h2 = F.dropout(F.relu(self.fc5(h2)), training=self.train)
             h, mixedLabels = self.mix(h1, h2, labels)
         else:
-            if whereToMix == 3:
+            if whereToMix == 4:
                 # Mix images and labels
                 h, mixedLabels = self.mix(h1, h2, labels)
             h = F.dropout(F.relu(self.fc5(h)), training=self.train)
