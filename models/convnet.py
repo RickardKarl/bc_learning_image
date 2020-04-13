@@ -95,8 +95,6 @@ class ConvNet(nn.Module):
             else:
                # Mix images and labels
                 h, mixedLabels = self.mix(h1, h2, labels)
-                h = h.to(device)
-                mixedLabels = mixedLabels.to(device)
         else:     
             h = self.conv11(x)
             h = self.conv12(h)
