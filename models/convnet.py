@@ -145,7 +145,6 @@ class ConvNet(nn.Module):
         device = torch.device("cuda" if cuda.is_available() else "cpu")
         dim = images1.size()
         batchSize = dim[0]
-        
 
         mixedLabels = torch.zeros([batchSize, 10]).to(device) # Hard coded for 10 classes
 
@@ -153,16 +152,22 @@ class ConvNet(nn.Module):
 
         if images1.dim() == 4:
             rdim = torch.zeros([batchSize, 1, 1, 1]).to(device)
+            for i in range(batchSize):
+                rdim[i][0][0][0] = r[i]
+
+                # Mix two labels
+                eye = torch.tensor(numpy.eye(10)) # Hard coded for 10 classes
+                mixedLabels[i] = (eye[labels[i][0]] * r[i] + eye[labels[i][1]] * (1 - r[i]))
+
         else:
             rdim = torch.zeros([batchSize, 1]).to(device)
+            for i in range(batchSize):
+                rdim[i][0] = r[i]
 
-        for i in range(batchSize):
-            rdim[i][0][0][0] = r[i]
+                # Mix two labels
+                eye = torch.tensor(numpy.eye(10)) # Hard coded for 10 classes
+                mixedLabels[i] = (eye[labels[i][0]] * r[i] + eye[labels[i][1]] * (1 - r[i]))
 
-            # Mix two labels
-            eye = torch.tensor(numpy.eye(10)) # Hard coded for 10 classes
-            mixedLabels[i] = (eye[labels[i][0]] * r[i] + eye[labels[i][1]] * (1 - r[i]))
-        
         mixedImages = images1 * rdim + images2 * (1 - rdim)
 
         return mixedImages, mixedLabels
