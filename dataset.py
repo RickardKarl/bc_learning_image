@@ -52,8 +52,8 @@ class ImageDataset(torch.utils.data.Dataset):
                 size = 32
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
-                     #U.padding(4),
-                     #U.random_crop(size),
+                     U.padding(4),
+                     U.random_crop(size),
                      ]
 
             
@@ -97,9 +97,9 @@ class ImageDataset(torch.utils.data.Dataset):
             image = self.preprocess(image).astype(np.float32)
             label = np.array(label, dtype=np.int32)
 
-        import matplotlib.pyplot as plt
-        plt.imshow(image)
-        plt.show()
+        #import matplotlib.pyplot as plt
+        #plt.imshow(image)
+        #plt.show()
 
         return image, label
 
