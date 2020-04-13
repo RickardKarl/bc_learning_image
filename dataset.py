@@ -29,8 +29,8 @@ class ImageDataset(torch.utils.data.Dataset):
                 self.std = np.array([68.2, 65.4, 70.4])
         else:
             if opt.plus:
-                self.mean = np.array([0, 0, 0])
-                self.std = np.array([1, 1, 1])
+                self.mean = np.array( 5.16064693,  0.80976569, -5.97041262])
+                self.std = np.array([66.87321444, 64.75576697, 67.28682121])
             else:
                 self.mean = np.array([139.36307497, 129.59948285, 133.09479106])
                 self.std = np.array([83.75314532, 78.329098,   82.05150934])
@@ -52,8 +52,8 @@ class ImageDataset(torch.utils.data.Dataset):
                 size = 32
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
-                     U.padding(4),
-                     U.random_crop(size),
+                     #U.padding(4),
+                     #U.random_crop(size),
                      ]
 
             
@@ -96,6 +96,10 @@ class ImageDataset(torch.utils.data.Dataset):
             image, label = self.base[i]
             image = self.preprocess(image).astype(np.float32)
             label = np.array(label, dtype=np.int32)
+
+        import matplotlib.pyplot as plt
+        plt.imshow(image)
+        plt.show()
 
         return image, label
 
