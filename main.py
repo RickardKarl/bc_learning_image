@@ -43,7 +43,7 @@ def train(opt, trial):
     # Keep track of best validation error rate
     best_val_error = 100.0
 
-    model = getattr(models, opt.netType + str(opt.whereToMix))(opt.nClasses)
+    model = getattr(models, opt.netType)(opt.nClasses)
     if opt.noGPU == False:
         model.cuda()
     # TODO: there is no direct method in PyTorch with NesterovAG
