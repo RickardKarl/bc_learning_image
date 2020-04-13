@@ -100,20 +100,20 @@ class ConvNet(nn.Module):
             h = self.conv12(h)
             h = F.max_pool2d(h, 2)
 
-            h = self.conv21(h)
-            h = self.conv22(h)
-            h = F.max_pool2d(h, 2)
+        h = self.conv21(h)
+        h = self.conv22(h)
+        h = F.max_pool2d(h, 2)
 
-            h = self.conv31(h)
-            h = self.conv32(h)
-            h = self.conv33(h)
-            h = self.conv34(h)
-            h = F.max_pool2d(h, 2)
+        h = self.conv31(h)
+        h = self.conv32(h)
+        h = self.conv33(h)
+        h = self.conv34(h)
+        h = F.max_pool2d(h, 2)
 
-            h = h.view(h.size(0), -1)
+        h = h.view(h.size(0), -1)
 
-            h = F.dropout(F.relu(self.fc4(h)), training=self.train)
-            h = F.dropout(F.relu(self.fc5(h)), training=self.train)
+        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
+        h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
         if Mix:
             return self.fc6(h), mixedLabels
