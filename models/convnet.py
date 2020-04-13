@@ -145,6 +145,7 @@ class ConvNet(nn.Module):
         device = torch.device("cuda" if cuda.is_available() else "cpu")
         dim = images1.size()
         batchSize = dim[0]
+        print(images1.size())
 
         mixedLabels = torch.zeros([batchSize, 10]).to(device) # Hard coded for 10 classes
 
