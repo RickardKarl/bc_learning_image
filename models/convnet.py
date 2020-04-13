@@ -30,6 +30,7 @@ class ConvNet(nn.Module):
     def forward(self, x):
 
         Mix = False
+        whereToMix = 0
         
         if type(x) == list:
 
