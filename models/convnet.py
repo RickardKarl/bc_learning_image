@@ -38,6 +38,7 @@ class ConvNet(nn.Module):
             # Split imput list
             labels = x[1]
             images = x[0]
+            whereToMix = x[2]
 
             batchSize = images.size()[0]
 
@@ -63,31 +64,56 @@ class ConvNet(nn.Module):
 
             h1 = F.max_pool2d(h1, 2)
             h2 = F.max_pool2d(h2, 2)
-            
-            # Mix images and labels
-            h, mixedLabels = self.mix(h1, h2, labels)
-            h = h.to(device)
-            mixedLabels = mixedLabels.to(device)
 
+            if whereToMix > 1:
+                h1 = self.conv21(h1)
+                h2 = self.conv21(h2)
+
+                h1 = self.conv22(h1)
+                h2 = self.conv22(h2)
+
+                h1 = F.max_pool2d(h1, 2)
+                h2 = F.max_pool2d(h2, 2)
+
+                if whereToMix > 2:
+                    h1 = self.conv31(h1)
+                    h2 = self.conv31(h2)
+
+                    h1 = self.conv32(h1)
+                    h2 = self.conv32(h2)
+
+                    h1 = self.conv33(h1)
+                    h2 = self.conv33(h2)
+
+                    h1 = self.conv34(h1)
+                    h2 = self.conv34(h2)
+
+                    h1 = F.max_pool2d(h1, 2)
+                    h2 = F.max_pool2d(h2, 2)
+
+
+            else:
+               # Mix images and labels
+                h, mixedLabels = self.mix(h1, h2, labels)
         else:     
             h = self.conv11(x)
             h = self.conv12(h)
             h = F.max_pool2d(h, 2)
 
-        h = self.conv21(h)
-        h = self.conv22(h)
-        h = F.max_pool2d(h, 2)
+            h = self.conv21(h)
+            h = self.conv22(h)
+            h = F.max_pool2d(h, 2)
 
-        h = self.conv31(h)
-        h = self.conv32(h)
-        h = self.conv33(h)
-        h = self.conv34(h)
-        h = F.max_pool2d(h, 2)
+            h = self.conv31(h)
+            h = self.conv32(h)
+            h = self.conv33(h)
+            h = self.conv34(h)
+            h = F.max_pool2d(h, 2)
 
-        h = h.view(h.size(0), -1)
+            h = h.view(h.size(0), -1)
 
-        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
-        h = F.dropout(F.relu(self.fc5(h)), training=self.train)
+            h = F.dropout(F.relu(self.fc4(h)), training=self.train)
+            h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
         if Mix:
             return self.fc6(h), mixedLabels
@@ -100,15 +126,13 @@ class ConvNet(nn.Module):
         dim = images1.size()
         batchSize = dim[0]
 
-        #mixedImages = torch.zeros([batchSize, dim[1], dim[2], dim[3]]).to(device)
-        mixedLabels = torch.zeros([batchSize, 10]).to(device)# Hard coded for 10 classes
+        mixedLabels = torch.zeros([batchSize, 10]).to(device) # Hard coded for 10 classes
 
         r = torch.tensor(numpy.random.uniform(size=batchSize)).to(device)
         r4dim = torch.zeros([batchSize, 1, 1, 1]).to(device)
 
         for i in range(batchSize):
             r4dim[i][0][0][0] = r[i]
-            #mixedImages[i] = (images1[i] * r[i] + images2[i] * (1 - r[i]))
 
             # Mix two labels
             eye = torch.tensor(numpy.eye(10)) # Hard coded for 10 classes
