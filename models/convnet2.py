@@ -70,7 +70,7 @@ class ConvNet(nn.Module):
 
         # Mix images and labels
         h, mixedLabels = self.mix(h1, h2, labels)
-        
+
         h = self.conv31(h)
         h = self.conv32(h)
         h = self.conv33(h)
@@ -102,7 +102,6 @@ class ConvNet(nn.Module):
             # Mix two labels
             eye = torch.tensor(numpy.eye(10)) # Hard coded for 10 classes
             mixedLabels[i] = (eye[labels[i][0]] * r[i] + eye[labels[i][1]] * (1 - r[i]))
-
 
         mixedImages = images1 * r4dim + images2 * (1 - r4dim)
 
