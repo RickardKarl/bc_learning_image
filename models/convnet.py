@@ -55,6 +55,7 @@ class ConvNet(nn.Module):
             images1 = images1.to(device)
             images2 = images2.to(device)
 
+        if whereToMix > 0:
             # Parallel training
             h1 = self.conv11(images1)
             h2 = self.conv11(images2)
@@ -64,56 +65,74 @@ class ConvNet(nn.Module):
 
             h1 = F.max_pool2d(h1, 2)
             h2 = F.max_pool2d(h2, 2)
-
-            if whereToMix > 1:
-                h1 = self.conv21(h1)
-                h2 = self.conv21(h2)
-
-                h1 = self.conv22(h1)
-                h2 = self.conv22(h2)
-
-                h1 = F.max_pool2d(h1, 2)
-                h2 = F.max_pool2d(h2, 2)
-
-                if whereToMix > 2:
-                    h1 = self.conv31(h1)
-                    h2 = self.conv31(h2)
-
-                    h1 = self.conv32(h1)
-                    h2 = self.conv32(h2)
-
-                    h1 = self.conv33(h1)
-                    h2 = self.conv33(h2)
-
-                    h1 = self.conv34(h1)
-                    h2 = self.conv34(h2)
-
-                    h1 = F.max_pool2d(h1, 2)
-                    h2 = F.max_pool2d(h2, 2)
-
-
-            else:
-               # Mix images and labels
-                h, mixedLabels = self.mix(h1, h2, labels)
-        else:     
+        else:
             h = self.conv11(x)
             h = self.conv12(h)
             h = F.max_pool2d(h, 2)
 
-        h = self.conv21(h)
-        h = self.conv22(h)
-        h = F.max_pool2d(h, 2)
+        if whereToMix > 1:
+            h1 = self.conv21(h1)
+            h2 = self.conv21(h2)
 
-        h = self.conv31(h)
-        h = self.conv32(h)
-        h = self.conv33(h)
-        h = self.conv34(h)
-        h = F.max_pool2d(h, 2)
+            h1 = self.conv22(h1)
+            h2 = self.conv22(h2)
 
-        h = h.view(h.size(0), -1)
+            h1 = F.max_pool2d(h1, 2)
+            h2 = F.max_pool2d(h2, 2)
+        else:
+            if whereToMix == 1:
+                # Mix images and labels
+                h, mixedLabels = self.mix(h1, h2, labels)
+            h = self.conv21(h)
+            h = self.conv22(h)
+            h = F.max_pool2d(h, 2)
 
-        h = F.dropout(F.relu(self.fc4(h)), training=self.train)
-        h = F.dropout(F.relu(self.fc5(h)), training=self.train)
+        if whereToMix > 2:
+            h1 = self.conv31(h1)
+            h2 = self.conv31(h2)
+
+            h1 = self.conv32(h1)
+            h2 = self.conv32(h2)
+
+            h1 = self.conv33(h1)
+            h2 = self.conv33(h2)
+
+            h1 = self.conv34(h1)
+            h2 = self.conv34(h2)
+
+            h1 = F.max_pool2d(h1, 2)
+            h2 = F.max_pool2d(h2, 2)
+        else:
+            if whereToMix == 2:
+                # Mix images and labels
+                h, mixedLabels = self.mix(h1, h2, labels)
+            h = self.conv31(h)
+            h = self.conv32(h)
+            h = self.conv33(h)
+            h = self.conv34(h)
+            h = F.max_pool2d(h, 2)
+
+        if whereToMix > 3:
+            h1 = h1.view(h1.size(0), -1)
+            h2 = h2.view(h2.size(0), -1)
+            h1 = F.dropout(F.relu(self.fc4(h1)), training=self.train)
+            h2 = F.dropout(F.relu(self.fc4(h2)), training=self.train)
+        else:
+            if whereToMix == 3:
+                # Mix images and labels
+                h, mixedLabels = self.mix(h1, h2, labels)
+            h = h.view(h.size(0), -1)
+            h = F.dropout(F.relu(self.fc4(h)), training=self.train)
+
+        if whereToMix > 4:
+            h1 = F.dropout(F.relu(self.fc5(h1)), training=self.train)
+            h2 = F.dropout(F.relu(self.fc5(h2)), training=self.train)
+            h, mixedLabels = self.mix(h1, h2, labels)
+        else:
+            if whereToMix == 3:
+                # Mix images and labels
+                h, mixedLabels = self.mix(h1, h2, labels)
+            h = F.dropout(F.relu(self.fc5(h)), training=self.train)
 
         if Mix:
             return self.fc6(h), mixedLabels
