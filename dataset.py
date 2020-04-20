@@ -1,15 +1,15 @@
 import os
 import numpy as np
 import random
-import cPickle
-import chainer
+import _pickle as cPickle
+import torch
 
 import utils as U
 
 
-class ImageDataset(chainer.dataset.DatasetMixin):
+class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, images, labels, opt, train=True):
-        self.base = chainer.datasets.TupleDataset(images, labels)
+        self.base = list(zip(images, labels)) # Might not work
         self.opt = opt
         self.train = train
         self.mix = (opt.BC and train)
@@ -38,7 +38,7 @@ class ImageDataset(chainer.dataset.DatasetMixin):
             normalize = U.zero_mean
         else:
             normalize = U.normalize
-        if self.train:
+        if self.train and self.opt.noDataAug != True:
             funcs = [normalize(self.mean, self.std),
                      U.horizontal_flip(),
                      U.padding(4),
@@ -55,7 +55,7 @@ class ImageDataset(chainer.dataset.DatasetMixin):
 
         return image
 
-    def get_example(self, i):
+    def __getitem__(self, i):
         if self.mix:  # Training phase of BC learning
             while True:  # Select two training examples
                 image1, label1 = self.base[random.randint(0, len(self.base) - 1)]
@@ -90,7 +90,7 @@ class ImageDataset(chainer.dataset.DatasetMixin):
 def setup(opt):
     def unpickle(fn):
         with open(fn, 'rb') as f:
-            data = cPickle.load(f)
+            data = cPickle.load(f, encoding='latin1')
         return data
 
     if opt.dataset == 'cifar10':
@@ -100,6 +100,14 @@ def setup(opt):
         val = unpickle(os.path.join(opt.data, 'test_batch'))
         val_images = val['data'].reshape((-1, 3, 32, 32))
         val_labels = val['labels']
+    elif opt.dataset == 'caltech101':
+        train = unpickle(os.path.join(opt.data, 'train'))
+        train_images = train['data'].reshape(-1, 3, 32, 32)
+        train_labels = train['labels']
+        val = unpickle(os.path.join(opt.data, 'test'))
+        val_images = val['data'].reshape((-1, 3, 32, 32))
+        val_labels = val['labels']
+
     else:
         train = unpickle(os.path.join(opt.data, 'train'))
         train_images = train['data'].reshape(-1, 3, 32, 32)
@@ -111,7 +119,7 @@ def setup(opt):
     # Iterator setup
     train_data = ImageDataset(train_images, train_labels, opt, train=True)
     val_data = ImageDataset(val_images, val_labels, opt, train=False)
-    train_iter = chainer.iterators.MultiprocessIterator(train_data, opt.batchSize, repeat=False)
-    val_iter = chainer.iterators.SerialIterator(val_data, opt.batchSize, repeat=False, shuffle=False)
+    train_iter = torch.utils.data.DataLoader(train_data, batch_size=opt.batchSize, shuffle=True)
+    val_iter = torch.utils.data.DataLoader(val_data, batch_size=opt.batchSize, shuffle=False)
 
     return train_iter, val_iter
