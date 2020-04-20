@@ -51,11 +51,6 @@ if __name__ == "__main__":
     print("Sorting all images...")
     for l, image_paths in label_to_image.items():
 
-        #if l in oversampled_images:
-        #    total_training_samples = 120
-        #else:
-        #    total_training_samples = len(image_paths)
-        
         total_training_samples = len(image_paths)
         nbr_training_samples = int(0.8*total_training_samples)
         
@@ -67,6 +62,7 @@ if __name__ == "__main__":
             image = image.resize((basewidth,hsize)) # rescale
             arr = np.asarray(image)
             arr = np.flip(np.rot90(np.transpose(arr), k=-1, axes =(1,2)), axis=2) # reshape (3,224,224) - ndarray.reshape does not work correctly
+            # arr = arr - np.mean(arr, keepdims = True)
             # Append to lists
             images_train.append(arr)
             labels_train.append(label_to_int.get(l))
@@ -79,6 +75,7 @@ if __name__ == "__main__":
             image = image.resize((basewidth,hsize)) # rescale
             arr = np.asarray(image)
             arr = np.flip(np.rot90(np.transpose(arr), k=-1, axes =(1,2)), axis=2) # reshape (3,224,224) - ndarray.reshape does not work correctly
+            # arr = arr - np.mean(arr, keepdims = True)
             # Append to lists
             images_test.append(arr)
             labels_test.append(label_to_int.get(l))
@@ -96,10 +93,6 @@ if __name__ == "__main__":
     print("Channel-wise std RGB of images:")
     print(np.std(images_test, axis=(0, 2, 3)))
 
-    print("Per-image mean RGB of images:")
-    print(train_size*np.mean(images_train, axis=(0,1,2,3)) + (1-train_size)*np.mean(images_test, axis=(0,1,2,3)))
-    print("Per-image std RGB of images:")
-    print(np.std(images_test, axis=(0,1,2,3)))
 
 
     print("Saving data...")
